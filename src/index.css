@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  
+ 
+}
+
+/* nav{
+  background-color: #2D4059;
+ 
+}
+nav ul li{
+  display: inline-block;
+  color: #FFD460;
+  margin: 18px 18px 18px 18px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  padding-left: 10px;
+}
+nav h1{
+  font-size: 48px;
+  font-weight: 600;
+
+}
+nav h2 {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+nav       img{
+  width: 50px;
+  height: 50px;
+}  */
