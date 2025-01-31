@@ -4,6 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { links } from "../../data/links";
 import logo from '../../assets/Logo mark.png';
 import Button from "../util/Button";
+import { motion } from "framer-motion";
 
 
 export default function Navbar() {
@@ -11,7 +12,11 @@ export default function Navbar() {
   const location = useLocation();
 
   return (
-    <nav className="bg-white shadow-md p-4 fixed top-0 left-0 w-full z-10">
+    <motion.nav
+      initial={{x:-100, opacity:0}}
+      animate={{x:0, opacity:1}}
+      transition={{duration:0.5}} 
+      className="bg-white shadow-md p-4 fixed top-0 left-0 w-full z-10" >
       <div className="container mx-auto flex justify-between items-center">
         
           <NavLink className="flex items-center" to="/">
@@ -19,9 +24,18 @@ export default function Navbar() {
           </NavLink>
 
 
-        <ul className='hidden xl:flex space-x-6'>
+        <motion.ul 
+         initial={{opacity:0}} 
+         animate={{opacity:1}} 
+         transition={{staggerChildren:0.2}} 
+         className='hidden xl:flex space-x-6 '>
           {links.map((link, index) => (
-            <li key={index} className="relative group">
+            <motion.li 
+            key={index} 
+            initial={{opacity:0, y:20}} 
+            animate={{opacity:1, y:0}} 
+            transition={{delay:index * 0.20}} 
+            className="relative group">
               <NavLink
                 to={link.link}
                 className={'text-gray-800 hover:text-green-500 block lg:text-[14px] '}
@@ -33,29 +47,38 @@ export default function Navbar() {
                   ${location.pathname === link.link ? "w-full" : ""}`}>
               </span>
 
-            </li>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
 
         <div className="hidden xl:block">
-          <button className=" bg-green-500 hover:bg-green-600 text-white font-bold font-[Montserrat] py-2 px-6 rounded  duration-500 hover:cursor-pointer">
+          <Button className=" bg-green-500 hover:bg-green-600 text-white font-bold font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
             Register
-          </button>
+          </Button>
         </div>
 
-        <button className="xl:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <motion.button animate ={{rotate: isOpen ? 180 : 0}} className="xl:hidden" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? (
-            <FaTimes className="h-6 w-6" />
+            <FaTimes  className="h-6 w-6" />
           ) : (
             <FaBars className="h-6 w-6" />
           )}
-        </button>
+        </motion.button>
       </div>
 
       {isOpen && (
-        <ul className='xl:hidden bg-white shadow-md  p-4 space-y-4 absolute top-16 left-0 w-full'>
+        <motion.ul 
+        initial={{opacity:0}} 
+        animate={{opacity:1}} 
+        transition={{staggerChildren:0.2}}  
+        className='xl:hidden bg-white shadow-md  p-4 space-y-4 absolute top-16 left-0 w-full'>
           {links.map((link, index) => (
-            <li key={index}>
+            <motion.li 
+            key={index}
+            initial={{opacity:0, y:20}} 
+            animate={{opacity:1, y:0}} 
+            transition={{delay:index * 0.20}}
+            >
               <NavLink
                 to={link.link}
                 className={`block text-gray-700 hover:text-green-500
@@ -63,15 +86,15 @@ export default function Navbar() {
               >
                 {link.name}
               </NavLink>
-            </li>
+            </motion.li>
           ))}
           <li>
-            <Button className=" bg-green-500 hover:bg-green-600 text-white font-bold font-[Montserrat] py-2 px-6 rounded duration-500 hover:cursor-pointer">
+            <Button className=" bg-green-500 hover:bg-green-600 text-white font-bold font-[Montserrat] py-2 px-6 rounded hover:cursor-pointer">
               Register
             </Button>
           </li>
-        </ul>
+        </motion.ul>
       )}
-    </nav>
+    </motion.nav>
   );
 }
