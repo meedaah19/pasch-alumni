@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { links } from "../../data/links";
 import logo from '../../assets/Logo mark.png';
 import Button from "../util/Button";
 import { motion } from "framer-motion";
 
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
 
   return (
     <motion.nav
@@ -52,9 +53,9 @@ export default function Navbar() {
         </motion.ul>
 
         <div className="hidden xl:block">
-          <Button className=" bg-green-500 hover:bg-green-600 text-white font-bold font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
-            Register
-          </Button>
+        <Button onClick={() => navigate('signin')}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
+        Sign In
+        </Button>
         </div>
 
         <motion.button animate ={{rotate: isOpen ? 180 : 0}} className="xl:hidden" onClick={() => setIsOpen(!isOpen)}>
@@ -89,9 +90,9 @@ export default function Navbar() {
             </motion.li>
           ))}
           <li>
-            <Button className=" bg-green-500 hover:bg-green-600 text-white font-bold font-[Montserrat] py-2 px-6 rounded hover:cursor-pointer">
-              Register
-            </Button>
+          <Button onClick={() => navigate('signin')}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
+          Sign In
+          </Button>
           </li>
         </motion.ul>
       )}

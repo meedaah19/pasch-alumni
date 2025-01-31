@@ -3,6 +3,7 @@ import RootPage from "./pages/RootPage";
 import HomePage from "./pages/HomePage";
 import Alumni from "./pages/Alumni";
 import Community from "./pages/Community";
+import SignInPage from "./pages/SignInPage";
 
 const router = createBrowserRouter([
   {
@@ -11,7 +12,8 @@ const router = createBrowserRouter([
     children: [
       {index: true, element:<HomePage/>},
       {path: 'alumni', element: <Alumni/>},
-      {path: 'community', element: <Community/>}
+      {path: 'community', element: <Community/>},
+      {path: 'Signin', element: <SignInPage/>}
     ]
   }
 ])
