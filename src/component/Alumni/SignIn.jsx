@@ -1,13 +1,19 @@
-let classNameForm = "bg-green-600 rounded-2xl";
-let Div = "rounded-2xl border-3 border-black p-5 mb-8 w-[700px]";
-let Header = "uppercase text-2xl font-bold mb-2 text-center";
+import Button from "../util/Button";
+
+let classNameForm = "bg-green-600 rounded-2xl mt-10";
+let Div = "rounded-2xl border-[3px] border-black p-5 mb-8 max-w-lg w-full";
+let Header = "uppercase text-2xl font-bold mb-2 text-center text-yellow-400";
 let div = "grid grid-cols-1 mb-2 text-white";
 let label = "font-medium text-xl " ;
-let input = "h-10 pl-2 border-2 border-black"
+let input = "h-10 pl-2 border-[2px] border-black"
 
 export default function SignIn(){
     return(
-        <div className="bg-gray-300 mt-[80px] p-10  flex justify-center text-yellow-400">
+        <div className="bg-gray-300 min-h-screen p-10 pt-20  flex flex-col items-center">
+            <div className="text-center mb-5">
+                <h2 className="text-2xl text-red-500 font-bold">Already have an account?</h2>
+                <Button className="border-[1px] border-red-500 text-red-500 mt-2 px-4 py-2 rounded-md">Log in</Button>
+            </div>
             <form className={classNameForm} action="">
             <div className= {Div}>
             <h1 className={Header}>Profile</h1>
@@ -16,8 +22,8 @@ export default function SignIn(){
                     <input className={input} type="text" name="name" id="name" />
                 </div>
                 <div className={div}>
-                    <label className={label} htmlFor="name">UserName</label>
-                    <input className={input} type="text" name="name" id="name" />
+                    <label className={label} htmlFor="username">UserName</label>
+                    <input className={input} type="text" name="username" id="username" />
                 </div>
                 <div className={div}>
                     <label className={label} htmlFor="password">Password</label>
@@ -28,12 +34,12 @@ export default function SignIn(){
                     <input className={input} type="file" name="profile-pic" id="profile-pic" />
                 </div>
                 <div className={div}>
-                    <label className={label} htmlFor="grad-year">Graduation Year</label>
-                    <input className={input} type="number" name="grad-year" id="grad-year" />
+                    <label className={label} htmlFor="gradyear">Graduation Year</label>
+                    <input className={input} type="number" name="gradyear" id="gradyear" />
                 </div>
                 <div className={div}>
-                    <label className={label} htmlFor="job-title">Current Job & Company</label>
-                    <input className={input} type="text" name="job-title" id="job-title" />
+                    <label className={label} htmlFor="jobtitle">Current Job & Company</label>
+                    <input className={input} type="text" name="jobtitle" id="jobtitle" />
                 </div>
                 <div className={div}>
                     <label className={label} htmlFor="location">Location</label>
@@ -104,9 +110,9 @@ export default function SignIn(){
                     <label className={label} htmlFor="end-year">End Year</label>
                     <input className={input} type="number" name="end-year" id="end-year" />
                 </div>
-                <div className="grid grid-cols-2 mb-4 text-white">
-                    <label className={label} htmlFor="present">Present</label>
-                    <input type="checkbox" name="present" id="present" />
+                <div className="flex items-center space-x-2 mb-4 text-white">
+                    <input type="checkbox" id="present" className="h-5 w-5 accent-green-600" />
+                    <label htmlFor="present" className={label}>Present</label>
                 </div>
                 <div className={div}>
                     <label className={label} htmlFor="description">Description of Role & Achievements</label>
