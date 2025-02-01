@@ -12,11 +12,12 @@ export default function Navbar() {
   const navigate = useNavigate();
 
 
-  return (
+  return (     
     <motion.nav
       initial={{x:-100, opacity:0}}
       animate={{x:0, opacity:1}}
-      transition={{duration:0.5}} 
+      transition={{duration:0.5}}
+       
       className="bg-white shadow-md p-4 fixed top-0 left-0 w-full z-10" >
       <div className="container mx-auto flex justify-between items-center">
         
