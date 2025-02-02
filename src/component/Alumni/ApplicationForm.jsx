@@ -1,18 +1,13 @@
-import Button from "../util/Button";
 import Input from "../util/Input";
 
-let classNameForm = " rounded-2xl mt-10";
-let Div = "rounded-2xl border-[3px] border-black p-5 mb-8 max-w-lg w-full";
+let classNameForm = " bg-white rounded-2xl mt-10";
+let Div = "rounded-2xl  p-5 mb-8 max-w-lg w-[500px]";
 let Header = "uppercase text-2xl font-bold mb-2 text-center text-black";
 
 
-export default function SignIn(){
+export default function ApplicationForm(){
     return(
-        <div className="bg-gray-300 min-h-screen p-10 pt-25  flex flex-col items-center">
-            <div className="text-center mb-5">
-                <h2 className="text-2xl text-black font-bold">Already have an account?</h2>
-                <Button className="border-[1px] border-red-500 text-red-500 mt-2 px-4 py-2 rounded-md cursor-pointer">Log in</Button>
-            </div>
+        <div className="bg-gray-100 min-h-screen p-10 pt-25  flex flex-col items-center">
             <form className={classNameForm} action="">
             <div className= {Div}>
             <h1 className={Header}>Profile</h1>
