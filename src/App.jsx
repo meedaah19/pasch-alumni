@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage";
 import Alumni from "./pages/Alumni";
 import Community from "./pages/Community";
 import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
+
 
 const router = createBrowserRouter([
   {
@@ -13,7 +15,8 @@ const router = createBrowserRouter([
       {index: true, element:<HomePage/>},
       {path: 'alumni', element: <Alumni/>},
       {path: 'community', element: <Community/>},
-      {path: 'Signin', element: <SignInPage/>}
+      {path: 'Signin', element: <SignInPage/>},
+      {path: 'Signup', element: <SignUpPage/>},
     ]
   }
 ])
