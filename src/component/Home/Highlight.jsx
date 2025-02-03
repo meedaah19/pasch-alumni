@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Activities from "./Activities";
 
 export default function Highlight(){
     return(
@@ -8,30 +9,12 @@ export default function Highlight(){
                 <span className="block w-16 h-1 bg-[#FFD700] mx-auto mt-2 rounded"></span>
            </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-7  ">
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Mentorship Programs</h3>
-              <p>Share your expertise and experiences by becoming a mentor for younger alumni or students in the network.</p>
-            </div>
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Event Planning & Organization</h3>
-              <p>Help plan and execute alumni events, reunions, or networking functions, either virtual or in-person.</p>
-            </div>
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Community Service Projects</h3>
-              <p>Participate in local charity drives, volunteering at shelters, or organizing community clean-ups.</p>
-            </div>
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Fundraising & Donation Drives</h3>
-              <p>Assist in organizing fundraising campaigns to support scholarships, alumni initiatives, or charitable causes.</p>
-            </div>
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Social Media & Marketing Support</h3>
-              <p>Help spread the word about alumni events or opportunities by managing social media accounts or creating promotional materials.</p>
-            </div>
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-4">Alumni Outreach & Recruitment</h3>
-              <p>Assist in reaching out to fellow alumni to increase membership and involvement in various activities or events.</p>
-            </div>
+            <Activities program="Mentorship Programs" description="Share your expertise and experiences by becoming a mentor for younger alumni or students in the network."/>
+            <Activities program="Event Planning & Organization" description="Help plan and execute alumni events, reunions, or networking functions, either virtual or in-person."/>
+            <Activities program="Community Service Projects" description="Participate in local charity drives, volunteering at shelters, or organizing community clean-ups."/>
+            <Activities program="Fundraising & Donation Drives" description="Assist in organizing fundraising campaigns to support scholarships, alumni initiatives, or charitable causes."/>
+            <Activities program="Social Media & Marketing Support" description="Help spread the word about alumni events or opportunities by managing social media accounts or creating promotional materials."/>
+            <Activities program="Alumni Outreach & Recruitment" description="Assist in reaching out to fellow alumni to increase membership and involvement in various activities or events."/>
           </div>
 
           <section className="bg-gray-500 text-[#FFD700] py-12 text-left mt-7 rounded-4xl">
