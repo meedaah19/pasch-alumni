@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { doSignInWithEmailAndPassword, doSignWithGoogle } from '../../../firebase/auth';
+import { useAuth } from '../../../Context/AuthContext';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -63,12 +64,14 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
+  const {userLoggedIn} = useAuth()
   const navigate = useNavigate()
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] =useState('');
   const [open, setOpen] =useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,19 +80,38 @@ export default function SignIn(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
+  const onGoogleSignIn = async (e) => {
+    e.preventDefault();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        await doSignWithGoogle();
+        navigate('/alumni'); // Redirect only after successful sign-in
+      } catch (error) {
+        console.error("Google Sign-In Failed:", error);
+      } finally {
+        setIsSigningIn(false);
+      }
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
-
+  
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateInputs()) return;
+  
+    setIsSigningIn(true);
+    try {
+      await doSignInWithEmailAndPassword(
+        document.getElementById('email').value,
+        document.getElementById('password').value
+      );
+      navigate('/alumni'); // Redirect after successful login
+    } catch (error) {
+      console.error("Sign-In Failed:", error);
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
@@ -184,7 +206,12 @@ export default function SignIn(props) {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={() => {{validateInputs}; navigate('/application')} } 
+              onClick={(e) => {
+                e.preventDefault();
+                if (validateInputs()) {
+                  navigate('/alumni');
+                }
+              }}
             >
               Sign in
             </Button>
@@ -203,18 +230,10 @@ export default function SignIn(props) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Sign in with Google')}
+              onClick={(e) => {onGoogleSignIn(e)}}
               startIcon={<GoogleIcon />}
             >
               Sign in with Google
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign in with Facebook
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}

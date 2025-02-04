@@ -1,13 +1,21 @@
 import Input from "../util/Input";
 
 let classNameForm = " bg-white rounded-2xl mt-10";
-let Div = "rounded-2xl  p-5 mb-8 max-w-lg w-[500px]";
+let Div = "rounded-2xl  p-5 mb-8 max-w-lg w-full md:w-[500px] ";
 let Header = "uppercase text-2xl font-bold mb-2 text-center text-black";
 
 
 export default function ApplicationForm(){
     return(
         <div className="bg-gray-100 min-h-screen p-10 pt-25  flex flex-col items-center">
+            <div className="md:w-[500px] w-full">
+            <h1 className="text-4xl font-bold text-center text-black mb-5">Alumni Application</h1>
+            <p className="text-center text-xl text-black">Please fill out the form below to apply to be a part of our Alumni Network.</p>
+            <p className="text-center text-xl text-black">All fields are required.</p>
+            <p className="text-center text-xl text-black">Please note that your application will be reviewed and you will be notified via email if you are accepted.</p>
+            <p className="text-center text-xl text-black">Thank you for your interest in our Alumni Network.</p>
+            <p className="text-center text-xl text-black">We look forward to having you as a part of our community.</p>
+            </div>
             <form className={classNameForm} action="">
             <div className= {Div}>
             <h1 className={Header}>Profile</h1>
