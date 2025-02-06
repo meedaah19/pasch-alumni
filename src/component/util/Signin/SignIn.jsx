@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { doSignInWithEmailAndPassword, doSignWithGoogle } from '../../../firebase/auth';
 import { useAuth } from '../../../Context/AuthContext';
 
@@ -86,7 +86,7 @@ export default function SignIn(props) {
       setIsSigningIn(true);
       try {
         await doSignWithGoogle();
-        navigate('/alumni'); // Redirect only after successful sign-in
+        navigate('/alumni');
       } catch (error) {
         console.error("Google Sign-In Failed:", error);
       } finally {
@@ -105,13 +105,14 @@ export default function SignIn(props) {
         document.getElementById('email').value,
         document.getElementById('password').value
       );
-      navigate('/alumni'); // Redirect after successful login
+      navigate('/alumni'); 
     } catch (error) {
       console.error("Sign-In Failed:", error);
     } finally {
       setIsSigningIn(false);
     }
   };
+
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
@@ -142,6 +143,7 @@ export default function SignIn(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
+      {userLoggedIn && (<Navigate to= {'/alumni'} replace={true} />)}
       <SignInContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-10'>
         <ColorModeSelect sx={{ position: 'fixed', top: '6rem', right: '1rem' }} />
         <Card variant="outlined">
@@ -154,7 +156,7 @@ export default function SignIn(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
             noValidate
             sx={{
               display: 'flex',
@@ -206,12 +208,8 @@ export default function SignIn(props) {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={(e) => {
-                e.preventDefault();
-                if (validateInputs()) {
-                  navigate('/alumni');
-                }
-              }}
+              disabled={isSigningIn}
+              
             >
               Sign in
             </Button>
@@ -230,7 +228,7 @@ export default function SignIn(props) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={(e) => {onGoogleSignIn(e)}}
+              onClick={onGoogleSignIn}
               startIcon={<GoogleIcon />}
             >
               Sign in with Google

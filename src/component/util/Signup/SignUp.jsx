@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../Context/AuthContext';
+import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,7 +18,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../Theme/AppTheme';
 import ColorModeSelect from '../Theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon} from './CustomIcons';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -62,12 +64,14 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 
 export default function SignUp(props) {
   const navigate = useNavigate();
+  const {userLoggedIn} = useAuth();
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -106,7 +110,12 @@ export default function SignUp(props) {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit =  async(event) => {
+    if(!isRegistering) {
+      setIsRegistering(true)
+      await doCreateUserWithEmailAndPassword(lastName, email, password)
+    }
+
     if (nameError || emailError || passwordError) {
       event.preventDefault();
       return;
@@ -123,6 +132,7 @@ export default function SignUp(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
+      {userLoggedIn && (<Navigate to={'/alumni'} replace={true} />)}
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <SignUpContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-20'>
         <Card variant="outlined">
