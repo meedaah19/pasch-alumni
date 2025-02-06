@@ -1,6 +1,8 @@
 import Button from "../util/Button";
+import {useNavigate } from "react-router-dom";
 
 export default function Hero() {
+    const navigate = useNavigate();
     return (
       <main
         className="relative w-full h-[900px] md:h-[800px] lg:h-[800px] flex items-center justify-center text-white bg-cover bg-center overflow-x-hidden"
@@ -13,7 +15,7 @@ export default function Hero() {
         <div className="relative text-center px-6">
           <h1 className="text-4xl md:text-6xl font-bold">Welcome to Pasch Alumni</h1>
           <p className="mt-4 text-lg md:text-xl">The Pasch Alumni Network fosters a dynamic and engaged community of alumni worldwide. We connect past and present members through enriching events, networking opportunities, and lifelong learning programs. Join us in building lasting connections and shaping the future together.</p>
-          <Button className="mt-6 px-6 py-3 bg-green-500 hover:bg-green-600 rounded-md text-lg">
+          <Button onClick={() => navigate('/signup')} className="cursor-pointer mt-6 px-6 py-3 bg-green-500 hover:bg-green-600 rounded-md text-lg">
             Join Now
           </Button> 
         </div>
