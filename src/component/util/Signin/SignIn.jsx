@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { doSignInWithEmailAndPassword, doSignWithGoogle } from '../../../firebase/auth';
-import { useAuth } from '../../../Context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -209,7 +209,7 @@ export default function SignIn(props) {
               fullWidth
               variant="contained"
               disabled={isSigningIn}
-              
+
             >
               Sign in
             </Button>

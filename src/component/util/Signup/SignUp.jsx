@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../Context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth';
 
 import Box from '@mui/material/Box';
