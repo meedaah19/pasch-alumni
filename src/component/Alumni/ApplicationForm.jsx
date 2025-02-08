@@ -1,62 +1,89 @@
+import { useState } from "react";
+import { db } from "../../firebase/firebase";
+import { collection, addDoc } from "../../firebase/firebase";
 import Input from "../util/Input";
 
-let classNameForm = " bg-white rounded-2xl mt-10";
-let Div = "rounded-2xl  p-5 mb-8 max-w-lg w-full md:w-[500px] ";
-let Header = "uppercase text-2xl font-bold mb-2 text-center text-black";
+export default function ApplicationForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    bio: "",
+    degree: "",
+    major: "",
+    gradYear: "",
+    jobTitle: "",
+    company: "",
+    startYear: "",
+    endYear: "",
+    present: false,
+    description: "",
+    industry: "",
+    github: "",
+    linkedin: "",
+    projects: "",
+    volunteer: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-export default function ApplicationForm(){
-    return(
-        <div className="bg-gray-100 min-h-screen p-10 pt-25  flex flex-col items-center">
-            <div className="md:w-[500px] w-full">
-            <h1 className="text-4xl font-bold text-center text-black mb-5">Alumni Application</h1>
-            <p className="text-center text-xl text-black">Please fill out the form below to apply to be a part of our Alumni Network.</p>
-            <p className="text-center text-xl text-black">All fields are required.</p>
-            <p className="text-center text-xl text-black">Please note that your application will be reviewed and you will be notified via email if you are accepted.</p>
-            <p className="text-center text-xl text-black">Thank you for your interest in our Alumni Network.</p>
-            <p className="text-center text-xl text-black">We look forward to having you as a part of our community.</p>
-            </div>
-            <form className={classNameForm} action="">
-            <div className= {Div}>
-            <h1 className={Header}>Profile</h1>
-                <Input type="text" name="name" id="name" htmlFor="name" label='Full Name'/>            
-                <Input type="text" name="username" id="username" htmlFor="username" label='UserName'/>   
-                <Input type="text" name="password" id="password" htmlFor="password" label='Password'/>   
-                <Input type="file" name="profile-pic" id="profile-pic" htmlFor="profile-pic" label='Profile Picture'/>   
-                <Input type='location' name='location' id='location' htmlFor='location' label='Location'/>
-                <Input type='bio' name='bio' id='bio' htmlFor='bio' label='Short Bio' className="h-15 pl-2 border-2"/>
-            </div>
-               <div className={Div}>
-               <h1 className={Header}>Contact</h1>
-               <Input type="email" name="email" id="email" htmlFor="email" label='Email'/>
-                <Input type="tel" name="phone" id="phone" htmlFor="phone" label='Phone'/>
-                <Input type='linkedin' name='linkedin' id='linkedin' htmlFor='linkedin' label='LinkedIn'/>
-                <Input type='github' name='github' id='github' htmlFor='github' label='GitHub/Portfolio Website'/>
-                <Input type='twitter/instagram' name='twitter/instagram' id='twitter/instagram' htmlFor='twitter/instagram' label='Twitter/Instagram'/>
-               </div>
-               <div className={Div}>
-               <h1 className={Header}>Education</h1>
-                <Input type="text" name="degree" id="degree" htmlFor="degree" label='Degree'/>
-                <Input type="text" name="major" id="major" htmlFor="major" label='Major'/>
-                <Input type="number" name="grad-year" id="grad-year" htmlFor="grad-year" label='Graduation Year'/>   
-               </div>
-                <div className={Div}>
-                <h1 className={Header}>Work Experience</h1>
-                <Input type='job-title' name='job-title' id='job-title' htmlFor='job-title' label='Job Title'/>
-                <Input type='company' name='company' id='company' htmlFor='company' label='Company'/>
-                <Input type='start-year' name='start-year' id='start-year' htmlFor='start-year' label='Start Year'/>
-                <Input type='end-year' name='end-year' id='end-year' htmlFor='end-year' label='End Year'/>
-                <Input type='checkbox' name='present' id='present' htmlFor='present' label='Present' className="h-5 w-5 accent-green-600"/>
-                <Input type='description' name='description' id='description' htmlFor='description' label='Description of Role & Achievements'/>
-                </div>
-                <div className={Div}>
-                <h1 className={Header}>Skills</h1>
-                <Input type='endorsements' name='endorsements' id='endorsements' htmlFor='endorsements' label='Endorsements'/>
-                <Input type='awards & recongnition' name='awards & recongnition' id='awards & recongnition' htmlFor='awards & recongnition' label='Awards & Recognitions'/>
-                <Input type='projects' name='projects' id='projects' htmlFor='projects' label='Projects'/>
-                <Input type='volunteer' name='volunteer' id='volunteer' htmlFor='volunteer' label='Volunteer'/>
-                </div>
-             </form>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await addDoc(collection(db, "alumni"), formData);
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form: ", error);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-gray-100 min-h-screen p-10 pt-25 flex flex-col items-center">
+      <h1 className="text-2xl md:text-4xl font-bold text-center text-black mb-5">Alumni Application</h1>
+      {submitted ? (
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h2 className="text-2xl font-bold text-green-600 mb-3">Application Submitted!</h2>
+          <p className="text-xl text-black">Your application has been received. We will notify you via email.</p>
         </div>
-    )
+      ) : (
+        <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
+          <Input type="text" name="name" label="Full Name" value={formData.name} onChange={handleChange} required />
+          <Input type="email" name="email" label="Email" value={formData.email} onChange={handleChange} required />
+          <Input type="tel" name="phone" label="Phone" value={formData.phone} onChange={handleChange} required />
+          <Input type="text" name="location" label="Location" value={formData.location} onChange={handleChange} required />
+          <Input type="text" name="bio" label="Short Bio" value={formData.bio} onChange={handleChange} required />
+          <Input type="text" name="degree" label="Degree" value={formData.degree} onChange={handleChange} required />
+          <Input type="text" name="major" label="Major" value={formData.major} onChange={handleChange} required />
+          <Input type="number" name="gradYear" label="Graduation Year" value={formData.gradYear} onChange={handleChange} required />
+          <Input type="text" name="jobTitle" label="Job Title" value={formData.jobTitle} onChange={handleChange} />
+          <Input type="text" name="company" label="Company" value={formData.company} onChange={handleChange} />
+          <Input type="number" name="startYear" label="Start Year" value={formData.startYear} onChange={handleChange} />
+          {!formData.present && <Input type="number" name="endYear" label="End Year" value={formData.endYear} onChange={handleChange} />}
+          <label className="flex items-center gap-2">
+            <input type="checkbox" name="present" checked={formData.present} onChange={handleChange} className="h-5 w-5" />
+            Present
+          </label>
+          <Input type="text" name="industry" label="Industry" value={formData.industry} onChange={handleChange} required />
+          <Input type="text" name="github" label="GitHub/Portfolio (Optional)" value={formData.github} onChange={handleChange} />
+          <Input type="text" name="linkedin" label="LinkedIn (Optional)" value={formData.linkedin} onChange={handleChange} />
+          <Input type="text" name="projects" label="Projects (Optional)" value={formData.projects} onChange={handleChange} />
+          <Input type="text" name="volunteer" label="Volunteer Work (Optional)" value={formData.volunteer} onChange={handleChange} />
+          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold mt-4" disabled={loading}>
+            {loading ? "Submitting..." : "Submit Application"}
+          </button>
+        </form>
+      )}
+    </div>
+  );
 }

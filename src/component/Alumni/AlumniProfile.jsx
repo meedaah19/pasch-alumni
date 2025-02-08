@@ -1,53 +1,86 @@
-import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { doc, getDoc } from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
 
-export default function AlumniProfile() {
+export default function AlumniProfile({ userEmail }) {
+  const [alumniData, setAlumniData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!userEmail) return;
+
+    const fetchAlumniData = async () => {
+      setLoading(true);
+      try {
+        const docRef = doc(db, "alumni", userEmail); // Using email as the document ID
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setAlumniData(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching alumni data:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchAlumniData();
+  }, [userEmail]);
+
+  if (loading) {
+    return <p className="text-center text-gray-600">Loading profile...</p>;
+  }
+
+  if (!alumniData) {
+    return <p className="text-center text-gray-600">Profile not found.</p>;
+  }
+
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-[100px] ">
-      {/* Header with Banner */}
+    <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-[100px]">
       <div className="relative h-40 bg-gradient-to-r from-red-500 to-red-700"></div>
 
-      {/* Profile Info */}
       <div className="text-center p-6 -mt-16">
         <img
           className="w-32 h-32 mx-auto rounded-full border-4 border-white shadow-md"
-          src="/profile.jpg" // Replace with actual image URL
+          src={alumniData.profilePic || "/profile.jpg"} 
           alt="Alumni Profile"
         />
-        <h2 className="text-2xl font-semibold text-gray-800 mt-2">John Doe</h2>
-        <p className="text-gray-600">Pasch Alumni - Class of 2020</p>
-        <p className="text-gray-500">Software Engineer at Google</p>
-        <p className="mt-3 text-gray-700">Passionate about AI & Web Development.</p>
+        <h2 className="text-2xl font-semibold text-gray-800 mt-2">{alumniData.name}</h2>
+        <p className="text-gray-600">Pasch Alumni - Class of {alumniData.gradYear}</p>
+        <p className="text-gray-500">{alumniData.jobTitle} at {alumniData.company}</p>
+        <p className="mt-3 text-gray-700">{alumniData.bio}</p>
       </div>
 
-      {/* Contact & Social Links */}
       <div className="flex justify-center gap-4 my-4">
-        <a href="#" className="text-blue-600 text-2xl">
-          <FaLinkedin />
-        </a>
-        <a href="#" className="text-gray-900 text-2xl">
-          <FaGithub />
-        </a>
-        <a href="#" className="text-blue-400 text-2xl">
-          <FaTwitter />
-        </a>
+        {alumniData.linkedin && (
+          <a href={alumniData.linkedin} className="text-blue-600 text-2xl" target="_blank" rel="noopener noreferrer">
+            <FaLinkedin />
+          </a>
+        )}
+        {alumniData.github && (
+          <a href={alumniData.github} className="text-gray-900 text-2xl" target="_blank" rel="noopener noreferrer">
+            <FaGithub />
+          </a>
+        )}
       </div>
 
-      {/* Education & Work Experience */}
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-800">Education</h3>
-        <p className="text-gray-600">B.Sc. Computer Science, MIT (2016 - 2020)</p>
+        <p className="text-gray-600">{alumniData.degree}, {alumniData.major}</p>
 
         <h3 className="mt-4 text-xl font-semibold text-gray-800">Work Experience</h3>
-        <p className="text-gray-600">Software Engineer, Google (2021 - Present)</p>
+        <p className="text-gray-600">{alumniData.jobTitle}, {alumniData.company} ({alumniData.startYear} - {alumniData.present ? "Present" : alumniData.endYear})</p>
       </div>
 
-      {/* Skills */}
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
         <div className="flex flex-wrap gap-2 mt-2">
-          <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">React.js</span>
-          <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">JavaScript</span>
-          <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">AI/ML</span>
+          {alumniData.skills?.map((skill, index) => (
+            <span key={index} className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">{skill}</span>
+          ))}
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
-let div = "grid grid-cols-1 mb-2 text-gray-600";
-let labelClass = "font-medium text-xl " ;
+let div = "grid grid-cols-1 mb-2 ";
+let labelClass = "block font-semibold" ;
 
-const Input = ({type, name, id, htmlFor, label, className= '' }) => {
+const Input = ({type, name, id, htmlFor, required, label}) => {
   return (
     <div className={div}>
     <label className={labelClass}htmlFor={htmlFor}>{label}</label>
-    <input  className={`h-10 pl-2 border-1 shadow-md rounded border-gray-100 hover:border-gray-400 ${className}`} type={type} name={name} id={id} />
+    <input  className="border p-2 rounded w-full" type={type} name={name} id={id} required={required} />
     </div>
 
   )
