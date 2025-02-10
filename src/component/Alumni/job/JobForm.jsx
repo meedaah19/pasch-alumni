@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "./firebase"; 
+import { db, auth } from "../../../firebase/firebase"; 
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const JobForm = () => {
+    const [user] = useAuthState(auth);
   const [job, setJob] = useState({
     title: "",
     company: "",
@@ -17,6 +19,7 @@ const JobForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!job.title || !job.company || !job.location || !job.description || !job.link) {
       alert("Please fill all fields");
       return;
@@ -25,6 +28,7 @@ const JobForm = () => {
     try {
       await addDoc(collection(db, "jobs"), {
         ...job,
+        postedBy: user.email,
         postedDate: Timestamp.now(),
       });
       alert("Job posted successfully!");
@@ -34,6 +38,9 @@ const JobForm = () => {
       alert("Error posting job. Please try again.");
     }
   };
+  if (!user) {
+    return <p className="text-red-500">You must be logged in to post a job.</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded-lg shadow-md">

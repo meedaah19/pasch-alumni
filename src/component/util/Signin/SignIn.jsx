@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { doSignInWithEmailAndPassword, doSignWithGoogle } from '../../../firebase/auth';
-import { useAuth } from '../../../context/AuthContext';
+import { auth } from '../../../firebase/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -64,6 +64,8 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const {userLoggedIn} = useAuth()
   const navigate = useNavigate()
   const [emailError, setEmailError] = useState(false);
@@ -107,11 +109,7 @@ export default function SignIn(props) {
   
     setIsSigningIn(true);
     try {
-      await doSignInWithEmailAndPassword(
-        document.getElementById('email').value,
-        document.getElementById('password').value
-      );
-      navigate('/alumni'); 
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error("Sign-In Failed:", error);
     } finally {
@@ -185,6 +183,7 @@ export default function SignIn(props) {
                 fullWidth
                 variant="outlined"
                 color={emailError ? 'error' : 'primary'}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -202,6 +201,7 @@ export default function SignIn(props) {
                 fullWidth
                 variant="outlined"
                 color={passwordError ? 'error' : 'primary'}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
             <FormControlLabel

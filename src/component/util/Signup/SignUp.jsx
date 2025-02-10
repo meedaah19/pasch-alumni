@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
-import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { auth } from '../../../firebase/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -63,6 +63,8 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp(props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const {userLoggedIn} = useAuth();
   const [emailError, setEmailError] = useState(false);
@@ -110,16 +112,23 @@ export default function SignUp(props) {
     return isValid;
   };
 
-  const handleSubmit =  async(event) => {
+  const handleSubmit =  async (e) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("Signup successful!");
+    } catch (error) {
+      alert(error.message);
+    }
     if(!isRegistering) {
       setIsRegistering(true)
-      await doCreateUserWithEmailAndPassword(lastName, email, password)
     }
 
     if (nameError || emailError || passwordError) {
-      event.preventDefault();
+      e.preventDefault();
       return;
     }
+    
     const data = new FormData(event.currentTarget);
     console.log({
       name: data.get('name'),
@@ -132,7 +141,6 @@ export default function SignUp(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      {userLoggedIn && (<Navigate to={'/alumni'} replace={true} />)}
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <SignUpContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-20'>
         <Card variant="outlined">
@@ -175,6 +183,8 @@ export default function SignUp(props) {
                 error={emailError}
                 helperText={emailErrorMessage}
                 color={passwordError ? 'error' : 'primary'}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full p-2 border rounded mb-2"
               />
             </FormControl>
             <FormControl>
@@ -191,6 +201,8 @@ export default function SignUp(props) {
                 error={passwordError}
                 helperText={passwordErrorMessage}
                 color={passwordError ? 'error' : 'primary'}
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full p-2 border rounded mb-2"
               />
             </FormControl>
             <FormControlLabel
