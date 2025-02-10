@@ -1,3 +1,6 @@
+import SignIn from "../util/Signin/SignIn";
+import LogoutButton from "../auth/LogOut";
+import useAuth from 'react-fireba'
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -7,6 +10,7 @@ import Button from "../util/Button";
 import { motion } from "framer-motion";
 
 export default function Navbar() {
+
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
