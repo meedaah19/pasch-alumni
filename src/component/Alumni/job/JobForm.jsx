@@ -1,0 +1,87 @@
+import React, { useState } from "react";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db } from "./firebase"; 
+
+const JobForm = () => {
+  const [job, setJob] = useState({
+    title: "",
+    company: "",
+    location: "",
+    description: "",
+    link: "",
+  });
+
+  const handleChange = (e) => {
+    setJob({ ...job, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!job.title || !job.company || !job.location || !job.description || !job.link) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "jobs"), {
+        ...job,
+        postedDate: Timestamp.now(),
+      });
+      alert("Job posted successfully!");
+      setJob({ title: "", company: "", location: "", description: "", link: "" });
+    } catch (error) {
+      console.error("Error posting job:", error);
+      alert("Error posting job. Please try again.");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-4 border rounded-lg shadow-md">
+      <h3 className="text-lg font-bold mb-2">Post a Job</h3>
+      <input
+        type="text"
+        name="title"
+        placeholder="Job Title"
+        value={job.title}
+        onChange={handleChange}
+        className="block w-full p-2 border rounded mb-2"
+      />
+      <input
+        type="text"
+        name="company"
+        placeholder="Company Name"
+        value={job.company}
+        onChange={handleChange}
+        className="block w-full p-2 border rounded mb-2"
+      />
+      <input
+        type="text"
+        name="location"
+        placeholder="Location"
+        value={job.location}
+        onChange={handleChange}
+        className="block w-full p-2 border rounded mb-2"
+      />
+      <textarea
+        name="description"
+        placeholder="Job Description"
+        value={job.description}
+        onChange={handleChange}
+        className="block w-full p-2 border rounded mb-2"
+      />
+      <input
+        type="text"
+        name="link"
+        placeholder="Application Link"
+        value={job.link}
+        onChange={handleChange}
+        className="block w-full p-2 border rounded mb-2"
+      />
+      <button type="submit" className="bg-green-500 text-white p-2 rounded">
+        Post Job
+      </button>
+    </form>
+  );
+};
+
+export default JobForm;

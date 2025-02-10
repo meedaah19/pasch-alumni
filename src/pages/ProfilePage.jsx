@@ -1,6 +1,6 @@
 import AlumniProfile from "../component/Alumni/AlumniProfile";
 
-export default function AlumniPage() {
+export default function ProfilePage() {
   return (
     <AlumniProfile/>
   );
