@@ -202,7 +202,7 @@ export default function SignUp(props) {
               fullWidth
               variant="contained"
               onClick={(e) =>{ e.preventDefault();
-                if(validateInputs()) { navigate('/application');
+                if(validateInputs()) { navigate('/application')
               }}}
             >
               Sign up

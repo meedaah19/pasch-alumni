@@ -2,12 +2,9 @@
 
 body {
   margin: 0;
-  overflow-x: hidden;
- 
+  
 }
-html{
-  overflow-x: hidden;
-}
+
 
 /* nav{
   background-color: #2D4059;

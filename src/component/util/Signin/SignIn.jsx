@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { doSignInWithEmailAndPassword, doSignWithGoogle } from '../../../firebase/auth';
 import { useAuth } from '../../../context/AuthContext';
 
@@ -19,7 +19,7 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import AppTheme from '../Theme/AppTheme';
 import ColorModeSelect from '../Theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon } from './CustomIcons';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -76,6 +76,12 @@ export default function SignIn(props) {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    if (userLoggedIn) {
+      navigate("/alumni/:userEmail"); 
+    }
+  }, [userLoggedIn, navigate]);
 
   const handleClose = () => {
     setOpen(false);
@@ -143,7 +149,6 @@ export default function SignIn(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      {userLoggedIn && (<Navigate to= {'/alumni'} replace={true} />)}
       <SignInContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-10'>
         <ColorModeSelect sx={{ position: 'fixed', top: '6rem', right: '1rem' }} />
         <Card variant="outlined">

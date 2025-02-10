@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootPage from "./pages/RootPage";
 import HomePage from "./pages/HomePage";
 import Alumni from "./pages/Alumni";
+import AlumniPage from "./pages/AlumniPage";
 import Community from "./pages/Community";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -15,7 +16,8 @@ const router = createBrowserRouter([
     element: <RootPage/>,
     children: [
       {index: true, element:<HomePage/>},
-      {path: 'alumni', element: <Alumni/>},
+      { path: 'alumni', element: <Alumni /> }, 
+      { path: 'alumni/:userEmail', element: <AlumniPage /> },
       {path: 'community', element: <Community/>},
       {path: 'signin', element: <SignInPage/>},
       {path: 'signup', element: <SignUpPage/>},

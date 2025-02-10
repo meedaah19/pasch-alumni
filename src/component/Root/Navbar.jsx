@@ -54,7 +54,7 @@ export default function Navbar() {
         </motion.ul>
 
         <div className="hidden xl:block">
-        <Button onClick={() => navigate('signin')}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
+        <Button onClick={() => {console.log("Navigating to: /signin"); navigate('/signin')}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
         Sign In
         </Button>
         </div>
@@ -92,7 +92,7 @@ export default function Navbar() {
             </motion.li>
           ))}
           <li>
-          <Button onClick={() => {navigate('signin'); setIsOpen(false)}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
+          <Button onClick={() => {navigate('/signin'); setIsOpen(false)}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
           Sign In
           </Button>
           </li>

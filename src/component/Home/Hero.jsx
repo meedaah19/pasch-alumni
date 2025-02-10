@@ -5,7 +5,7 @@ export default function Hero() {
     const navigate = useNavigate();
     return (
       <main
-        className="relative w-full h-[900px] md:h-[800px] lg:h-[800px] flex items-center justify-center text-white bg-cover bg-center overflow-x-hidden"
+        className="relative w-full h-[900px] md:h-[800px] lg:h-[800px] flex items-center justify-center text-white bg-cover bg-center "
         style={{ backgroundImage: "url('https://images.pexels.com/photos/8093046/pexels-photo-8093046.jpeg?auto=compress&cs=tinysrgb&w=600')" }}
       >
         <div >

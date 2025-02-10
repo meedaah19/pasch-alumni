@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { doc, getDoc } from "../../firebase/firebase";
 import { db } from "../../firebase/firebase";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 
-export default function AlumniProfile({ userEmail }) {
+export default function AlumniProfile() {
+  const {userEmail} = useParams();
   const [alumniData, setAlumniData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +33,7 @@ export default function AlumniProfile({ userEmail }) {
   }, [userEmail]);
 
   if (loading) {
-    return <p className="text-center text-gray-600">Loading profile...</p>;
+    return <p className="text-center text-gray-600 pt-25">Loading profile...</p>;
   }
 
   if (!alumniData) {
