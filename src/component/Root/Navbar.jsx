@@ -1,6 +1,4 @@
-import SignIn from "../util/Signin/SignIn";
 import LogoutButton from "../auth/LogOut";
-import useAuth from 'react-fireba'
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -8,9 +6,11 @@ import { links } from "../../data/links";
 import logo from '../../assets/Logo mark.png';
 import Button from "../util/Button";
 import { motion } from "framer-motion";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase/firebase";
 
 export default function Navbar() {
-
+  const[ user] = useAuthState(auth);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,12 +57,16 @@ export default function Navbar() {
           ))}
         </motion.ul>
 
-        <div className="hidden xl:block">
-        <Button onClick={() => {console.log("Navigating to: /signin"); navigate('/signin')}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
-        Sign In
-        </Button>
-        </div>
-
+        {user ? (
+            <div className="flex items-center gap-4">
+              <span>Welcome, {fullName || user.email}!</span>
+              <LogoutButton />
+            </div>
+          ) : (
+            <Button onClick={() => {navigate('/signin'); setIsOpen(false)}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
+            Sign In
+            </Button>
+      )}
         <motion.button animate ={{rotate: isOpen ? 180 : 0}} className="xl:hidden" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? (
             <FaTimes  className="h-6 w-6" />
@@ -96,9 +100,17 @@ export default function Navbar() {
             </motion.li>
           ))}
           <li>
-          <Button onClick={() => {navigate('/signin'); setIsOpen(false)}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
-          Sign In
-          </Button>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span>Welcome, {user.email}!</span>
+              <LogoutButton />
+            </div>
+          ) : (
+            <Button onClick={() => {navigate('/signin'); setIsOpen(false)}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">
+            Sign In
+            </Button>
+      )}
+          
           </li>
         </motion.ul>
       )}

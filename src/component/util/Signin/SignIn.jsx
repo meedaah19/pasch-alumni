@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../../../firebase/firebase';
+import { auth, db } from '../../../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from "firebase/firestore";
+
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -66,7 +68,6 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 export default function SignIn(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {userLoggedIn} = useAuth()
   const navigate = useNavigate()
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
@@ -78,12 +79,6 @@ export default function SignIn(props) {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    if (userLoggedIn) {
-      navigate("/alumni/:userEmail"); 
-    }
-  }, [userLoggedIn, navigate]);
 
   const handleClose = () => {
     setOpen(false);
@@ -109,7 +104,16 @@ export default function SignIn(props) {
   
     setIsSigningIn(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if(userDoc.exist()) {
+        const userData = userDoc.data();
+        alert(`Welcome back, ${userData.fullName}!`)
+      } else {
+        alert("No user details found. Please complete your profile.");
+      }
     } catch (error) {
       console.error("Sign-In Failed:", error);
     } finally {
@@ -214,7 +218,9 @@ export default function SignIn(props) {
               fullWidth
               variant="contained"
               disabled={isSigningIn}
-
+              onClick={(e) =>{ e.preventDefault();
+                if(validateInputs()) { navigate('/alumni/:userEmail')
+              }}}
             >
               Sign in
             </Button>

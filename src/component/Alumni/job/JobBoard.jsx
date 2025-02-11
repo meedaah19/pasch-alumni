@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase"; // Import Firestore
+import { db } from "../../../firebase/firebase"; 
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
@@ -27,7 +27,7 @@ const JobBoard = () => {
 
   return (
     <div className="job-board-container">
-      <h2 className="text-center mb-6 text-2xl font-bold">Alumni Job Board</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6 ">Alumni Job Board</h2>
       
       {loading ? (
         <p>Loading jobs...</p>

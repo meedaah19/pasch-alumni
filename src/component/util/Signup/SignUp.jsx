@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../../../firebase/firebase';
+import { auth, db } from '../../../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from "firebase/firestore";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -65,8 +66,8 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 export default function SignUp(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
   const navigate = useNavigate();
-  const {userLoggedIn} = useAuth();
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -115,10 +116,18 @@ export default function SignUp(props) {
   const handleSubmit =  async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User created:", user);
+
+      await setDoc(doc(db, 'users', user.uid), {
+        fullName,
+        email,
+        createdAt: new Date(),
+    })
       alert("Signup successful!");
     } catch (error) {
-      alert(error.message);
+      alert("Signup failed:" + error.message);
     }
     if(!isRegistering) {
       setIsRegistering(true)
@@ -129,7 +138,7 @@ export default function SignUp(props) {
       return;
     }
     
-    const data = new FormData(event.currentTarget);
+    const data = new FormData(e.currentTarget);
     console.log({
       name: data.get('name'),
       lastName: data.get('lastName'),
@@ -168,6 +177,7 @@ export default function SignUp(props) {
                 error={nameError}
                 helperText={nameErrorMessage}
                 color={nameError ? 'error' : 'primary'}
+                onChange={(e) => setFullName(e.target.value)}
               />
             </FormControl>
             <FormControl>
@@ -214,7 +224,7 @@ export default function SignUp(props) {
               fullWidth
               variant="contained"
               onClick={(e) =>{ e.preventDefault();
-                if(validateInputs()) { navigate('/application')
+                if(validateInputs()) { navigate('/signin')
               }}}
             >
               Sign up
