@@ -7,7 +7,6 @@ import Community from "./pages/Community";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Application from "./pages/Application";
-import { AuthProvider } from "./context/AuthContext";
 
 
 const router = createBrowserRouter([
@@ -28,9 +27,7 @@ const router = createBrowserRouter([
 
 function App() {
   return( 
-  <AuthProvider>
   <RouterProvider router={router}/> 
-  </AuthProvider>
   
   )
 }
