@@ -1,4 +1,4 @@
-import LogoutButton from "../auth/LogOut";
+import LogoutButton from "../../auth/LogOut";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";

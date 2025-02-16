@@ -18,7 +18,8 @@ const router = createBrowserRouter([
       {index: true, element:<HomePage/>},
       { path: 'alumni', element: <Alumni /> }, 
       { path: 'alumni/:userEmail', element: <ProfilePage /> },
-      {path: 'community', element: <CommunityPage/>, children: [
+      {path: 'community', children: [
+        {path: true, element: <CommunityPage/>},
         {path: 'discussion', element: <DiscussionPage/>},
         {path: 'events', element: <EventsPage/>},
         {path:  ':userEmail', element: <ProfilePage />}
