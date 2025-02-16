@@ -27,7 +27,7 @@ const JobBoard = () => {
 
   return (
     <div className="job-board-container">
-      <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6 ">Alumni Job Board</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6 font-serif">Alumni Job Board</h2>
       
       {loading ? (
         <p>Loading jobs...</p>

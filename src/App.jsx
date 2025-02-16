@@ -7,7 +7,8 @@ import CommunityPage from "./pages/CommunityPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Application from "./pages/Application";
-
+import DiscussionPage from "./pages/DiscussionPage";
+import EventsPage from "./pages/EventsPage";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,11 @@ const router = createBrowserRouter([
       {index: true, element:<HomePage/>},
       { path: 'alumni', element: <Alumni /> }, 
       { path: 'alumni/:userEmail', element: <ProfilePage /> },
-      {path: 'community', element: <CommunityPage/>},
+      {path: 'community', element: <CommunityPage/>, children: [
+        {path: 'discussion', element: <DiscussionPage/>},
+        {path: 'events', element: <EventsPage/>},
+        {path:  ':userEmail', element: <ProfilePage />}
+      ]},
       {path: 'signin', element: <SignInPage/>},
       {path: 'signup', element: <SignUpPage/>},
       {path: 'application', element: <Application/>}

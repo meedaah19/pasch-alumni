@@ -79,7 +79,7 @@ export default function SignUp(props) {
   const validateInputs = () => {
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const name = document.getElementById('name');
+    const fullName = document.getElementById('fullName');
 
     let isValid = true;
 
@@ -101,9 +101,9 @@ export default function SignUp(props) {
       setPasswordErrorMessage('');
     }
 
-    if (!name.value || name.value.length < 1) {
+    if (!fullName.value || fullName.value.length < 1) {
       setNameError(true);
-      setNameErrorMessage('Name is required.');
+      setNameErrorMessage('fullName is required.');
       isValid = false;
     } else {
       setNameError(false);
@@ -115,6 +115,7 @@ export default function SignUp(props) {
 
   const handleSubmit =  async (e) => {
     e.preventDefault();
+    validateInputs();
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -125,9 +126,10 @@ export default function SignUp(props) {
         email,
         createdAt: new Date(),
     })
-      alert("Signup successful!");
+      console.log("Signup successful!");
+      navigate('/signin');
     } catch (error) {
-      alert("Signup failed:" + error.message);
+      console.log("Signup failed:" + error.message);
     }
     if(!isRegistering) {
       setIsRegistering(true)
@@ -137,14 +139,6 @@ export default function SignUp(props) {
       e.preventDefault();
       return;
     }
-    
-    const data = new FormData(e.currentTarget);
-    console.log({
-      name: data.get('name'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   return (
@@ -162,17 +156,17 @@ export default function SignUp(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+          //  onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
               <FormLabel htmlFor="name">Full name</FormLabel>
               <TextField
-                autoComplete="name"
-                name="name"
+                autoComplete="fullName"
+                name="fullName"
                 required
                 fullWidth
-                id="name"
+                id="fullName"
                 placeholder="Jon Snow"
                 error={nameError}
                 helperText={nameErrorMessage}
@@ -223,9 +217,7 @@ export default function SignUp(props) {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={(e) =>{ e.preventDefault();
-                if(validateInputs()) { navigate('/signin')
-              }}}
+              onClick= {handleSubmit}
             >
               Sign up
             </Button>

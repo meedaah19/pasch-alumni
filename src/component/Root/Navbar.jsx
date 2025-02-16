@@ -59,8 +59,8 @@ export default function Navbar() {
 
         {user ? (
             <div className="flex items-center gap-4">
-              <span>Welcome, {fullName || user.email}!</span>
-              <LogoutButton />
+              {/* <span>Welcome, {fullName || user.email}!</span>
+              <LogoutButton /> */}
             </div>
           ) : (
             <Button onClick={() => {navigate('/signin'); setIsOpen(false)}}  className=" bg-green-500 hover:bg-green-600 text-white font-bold uppercase font-[Montserrat] py-2 px-6 rounded  hover:cursor-pointer">

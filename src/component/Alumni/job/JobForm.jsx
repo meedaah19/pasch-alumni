@@ -44,7 +44,7 @@ const JobForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded-lg shadow-md">
-      <h3 className="text-lg font-bold mb-2">Post a Job</h3>
+      <h3 className="text-lg font-bold mb-2 font-serif">Post a Job</h3>
       <input
         type="text"
         name="title"

@@ -42,9 +42,9 @@ export default function AlumniDirectory() {
 
   return (
     <div className="max-w-4xl mx-auto p-4 pt-8">
-      <h2 className="text-2xl mb-4 font-semibold text-gray-800 text-center">Alumni Directory</h2>
+      <h2 className="text-2xl mb-4 font-semibold text-gray-800 text-center font-serif">Alumni Directory</h2>
 
-      {/* Search & Filter Section */}
+      
       <div className="flex flex-wrap gap-4 mb-4">
         <input
           type="text"
@@ -54,7 +54,7 @@ export default function AlumniDirectory() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        {/* Graduation Year - Can Type or Select */}
+       
         <input
           type="text"
           placeholder="Graduation Year"
@@ -63,7 +63,7 @@ export default function AlumniDirectory() {
           onChange={(e) => setSelectedYear(e.target.value)}
         />
 
-        {/* Location - Can Type or Select */}
+      
         <input
           type="text"
           placeholder="Location"
@@ -72,7 +72,7 @@ export default function AlumniDirectory() {
           onChange={(e) => setSelectedLocation(e.target.value)}
         />
 
-        {/* Industry - Can Type or Select */}
+       
         <input
           type="text"
           placeholder="Industry"
@@ -82,7 +82,7 @@ export default function AlumniDirectory() {
         />
       </div>
 
-      {/* Alumni List */}
+     
       {loading ? (
         <p>Loading...</p>
       ) : (
