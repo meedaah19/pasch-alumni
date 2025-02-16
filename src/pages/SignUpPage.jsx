@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from "../firebase/firebase";
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -64,6 +65,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUpPage(props) {
+  const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -74,7 +76,7 @@ export default function SignUpPage(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -113,26 +115,41 @@ export default function SignUpPage(props) {
     return isValid;
   };
 
+  const handleGoogleSignUp = async (e) => {
+    e.preventDefault();
+    validateInputs();
+    setIsSigningUp(true)
+    try{
+      const result = signInWithPopup(auth, provider);
+      alert('Signed up successfully:', result);
+      navigate('/signin');
+    } catch (error) {
+      alert('Google Sign-Up Failed:', error);
+    } finally{
+      setIsSigningUp(false);
+    }
+  }
+
   const handleSubmit =  async (e) => {
     e.preventDefault();
     validateInputs();
+    setIsSigningUp(true)
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log("User created:", user);
+      alert("User created:", user);
 
       await setDoc(doc(db, 'users', user.uid), {
         fullName,
         email,
         createdAt: new Date(),
     })
-      console.log("Signup successful!");
+      alert("Signup successful!");
       navigate('/signin');
     } catch (error) {
-      console.log("Signup failed:" + error.message);
-    }
-    if(!isRegistering) {
-      setIsRegistering(true)
+      alert("Signup failed:" + error.message);
+    } finally{
+      setIsSigningUp(false);
     }
 
     if (nameError || emailError || passwordError) {
@@ -160,7 +177,7 @@ export default function SignUpPage(props) {
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="name">Full Name</FormLabel>
               <TextField
                 autoComplete="fullName"
                 name="fullName"
@@ -217,9 +234,10 @@ export default function SignUpPage(props) {
               type="submit"
               fullWidth
               variant="contained"
+              disabled={isSigningUp}
               onClick= {handleSubmit}
             >
-              Sign up
+              {isSigningUp ? 'SigningUp' : 'Sign Up'}
             </Button>
           </Box>
           <Divider>
@@ -229,7 +247,8 @@ export default function SignUpPage(props) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Sign up with Google')}
+              disabled={isSigningUp}
+              onClick={handleGoogleSignUp}
               startIcon={<GoogleIcon />}
             >
               Sign up with Google

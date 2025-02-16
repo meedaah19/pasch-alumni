@@ -15,7 +15,7 @@ export default function AlumniProfile() {
     const fetchAlumniData = async () => {
       setLoading(true);
       try {
-        const docRef = doc(db, "alumni", userEmail); // Using email as the document ID
+        const docRef = doc(db, "alumni", userEmail); 
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -37,7 +37,7 @@ export default function AlumniProfile() {
   }
 
   if (!alumniData) {
-    return <p className="text-center text-gray-600">Profile not found.</p>;
+    return <p className="text-center text-gray-600 pt-25">Profile not found.</p>;
   }
 
   return (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db, auth } from "../../../firebase/firebase"; 
 import { useAuthState } from "react-firebase-hooks/auth";
+import { redirect } from "react-router-dom";
 
 const JobForm = () => {
     const [user] = useAuthState(auth);
@@ -36,14 +37,16 @@ const JobForm = () => {
     } catch (error) {
       console.error("Error posting job:", error);
       alert("Error posting job. Please try again.");
+    } finally {
+      redirect
     }
   };
   if (!user) {
-    return <p className="text-red-500">You must be logged in to post a job.</p>;
+    return <p className="text-red-500 text-center text-xl ">You must be logged in to post a job.</p>;
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded-lg shadow-md">
+    <form onSubmit={handleSubmit} className="  max-w-4xl p-4 border rounded-lg shadow-md mx-auto">
       <h3 className="text-lg font-bold mb-2 font-serif">Post a Job</h3>
       <input
         type="text"

@@ -26,17 +26,17 @@ const JobBoard = () => {
   }, []);
 
   return (
-    <div className="job-board-container">
+    <div className="job-board-container max-w-4xl mx-auto p-4">
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6 font-serif">Alumni Job Board</h2>
       
       {loading ? (
         <p>Loading jobs...</p>
       ) : jobs.length === 0 ? (
-        <p>No job opportunities available at the moment.</p>
+        <p className="text-center text-xl text-gray-200">No job opportunities available at the moment.</p>
       ) : (
         <div className="job-list">
           {jobs.map((job) => (
-            <div key={job.id} className="job-card p-4 mb-4 border rounded-lg shadow-md">
+            <div key={job.id} className="max-w-4xl mx-auto job-card p-4 mb-4 border rounded-lg shadow-md">
               <h3 className="text-xl font-bold">{job.title}</h3>
               <p className="text-lg">{job.company} - {job.location}</p>
               <p className="text-sm text-gray-600">{job.description}</p>

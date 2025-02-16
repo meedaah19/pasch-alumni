@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth'; 
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc} from "../firebase/firebase";
 
 import Box from '@mui/material/Box';
@@ -65,6 +66,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignInPage(props) {
+  const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
@@ -84,17 +86,16 @@ export default function SignInPage(props) {
   };
   const onGoogleSignIn = async (e) => {
     e.preventDefault();
-    if (!isSigningIn) {
       setIsSigningIn(true);
       try {
-        await doSignWithGoogle();
-        navigate('/alumni');
+       const result = await signInWithPopup(auth, provider);
+       alert('Signed in successfully:', result);
+        navigate('/alumni/::userEmail');
       } catch (error) {
-        console.error("Google Sign-In Failed:", error);
+        alert("Google Sign-In Failed:", error);
       } finally {
         setIsSigningIn(false);
       }
-    }
   };
   
   const onSubmit = async (e) => {
@@ -114,7 +115,7 @@ export default function SignInPage(props) {
         alert("No user details found. Please complete your profile.");
       }
     } catch (error) {
-      console.error("Sign-In Failed:", error);
+      alert("Sign-In Failed:", error);
     } finally {
       setIsSigningIn(false);
     }
@@ -218,7 +219,7 @@ export default function SignInPage(props) {
               disabled={isSigningIn}
               onClick= {onSubmit}
             >
-              Sign in
+             {isSigningIn ? 'Signing In...' : 'Sign In' }
             </Button>
             <Link
               component="button"
@@ -235,6 +236,7 @@ export default function SignInPage(props) {
             <Button
               fullWidth
               variant="outlined"
+              disabled={isSigningIn}
               onClick={onGoogleSignIn}
               startIcon={<GoogleIcon />}
             >
