@@ -9,6 +9,8 @@ import SignUpPage from "./pages/SignUpPage";
 import Application from "./pages/Application";
 import DiscussionPage from "./pages/DiscussionPage";
 import EventsPage from "./pages/EventsPage";
+import JobBoard from "./pages/JobBoardPage";
+import JobForm from "./pages/JobFormPage";
 
 const router = createBrowserRouter([
   {
@@ -16,8 +18,12 @@ const router = createBrowserRouter([
     element: <RootPage/>,
     children: [
       {index: true, element:<HomePage/>},
-      { path: 'alumni', element: <Alumni /> }, 
-      { path: 'alumni/:userEmail', element: <ProfilePage /> },
+      { path: 'alumni', children: [
+        { index: true, element: <Alumni /> },
+        { path: 'alumni/:userEmail', element: <ProfilePage /> },
+        {path: 'jobBoard', element: <JobBoard/>},
+        {path: 'jobForm', element: <JobForm/>}
+      ]}, 
       {path: 'community', children: [
         {index: true, element: <CommunityPage/>},
         {path: 'discussion', element: <DiscussionPage/>},
