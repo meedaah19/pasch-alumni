@@ -13,7 +13,7 @@ const navigate = useNavigate();
 
   return (
     <>
-    <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">
+    <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 cursor-pointer text-white p-2 rounded">
       Logout
     </button>
     

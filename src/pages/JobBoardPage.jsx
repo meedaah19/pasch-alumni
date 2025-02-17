@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase"; 
 import { Link } from "react-router-dom";
+import {auth} from "../firebase/firebase";
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState(null);
 
   useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserEmail(currentUser.email);
+    }
+
     const fetchJobs = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "jobs"));
@@ -34,7 +41,7 @@ const JobBoard = () => {
       {loading ? (
         <p>Loading jobs...</p>
       ) : jobs.length === 0 ? (
-        <p className="text-center text-xl text-gray-200">No job opportunities available at the moment.</p>
+        <p className="text-center text-xl text-black">No job opportunities available at the moment.</p>
       ) : (
         <div className="job-list">
           {jobs.map((job) => (
@@ -45,14 +52,19 @@ const JobBoard = () => {
               <p className="text-xs text-gray-400 mt-2">
                 Posted on: {new Date(job.postedDate?.seconds * 1000).toLocaleDateString()}
               </p>
-              <a 
-                href={job.link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <div className="flex justify-between items-center">
+              <Link
+                to={job.link}
                 className="mt-4 inline-block text-green-500 hover:text-green-400"
               >
                 Apply Now
-              </a>
+              </Link>
+              {userEmail === job.postedBy && (
+              <Link to={`/edit/${job.id}`} className="border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
+                Edit
+              </Link>
+              )}
+              </div>
             </div>
           ))}
         </div>

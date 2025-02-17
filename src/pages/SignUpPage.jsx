@@ -122,7 +122,7 @@ export default function SignUpPage(props) {
     try{
       const result = signInWithPopup(auth, provider);
       alert('Signed up successfully:', result);
-      navigate('/signin');
+      navigate('/alumni');
     } catch (error) {
       alert('Google Sign-Up Failed:', error);
     } finally{
@@ -145,7 +145,7 @@ export default function SignUpPage(props) {
         createdAt: new Date(),
     })
       alert("Signup successful!");
-      navigate('/signin');
+      navigate('/alumni');
     } catch (error) {
       alert("Signup failed:" + error.message);
     } finally{

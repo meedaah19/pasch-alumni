@@ -11,6 +11,7 @@ import DiscussionPage from "./pages/DiscussionPage";
 import EventsPage from "./pages/EventsPage";
 import JobBoard from "./pages/JobBoardPage";
 import JobForm from "./pages/JobFormPage";
+import EditJobForm from "./pages/EditJobForm";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,10 @@ const router = createBrowserRouter([
       { path: 'alumni', children: [
         { index: true, element: <Alumni /> },
         { path: 'alumni/:userEmail', element: <ProfilePage /> },
-        {path: 'jobBoard', element: <JobBoard/>},
+        {path: 'jobBoard', children: [
+          {index: true,  element: <JobBoard/>},
+          {path: 'edit:id', element: <EditJobForm/>}
+        ]},
         {path: 'jobForm', element: <JobForm/>}
       ]}, 
       {path: 'community', children: [

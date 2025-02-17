@@ -90,7 +90,7 @@ export default function SignInPage(props) {
       try {
        const result = await signInWithPopup(auth, provider);
        alert('Signed in successfully:', result);
-        navigate('/alumni/::userEmail');
+        navigate('/alumni');
       } catch (error) {
         alert("Google Sign-In Failed:", error);
       } finally {
@@ -110,7 +110,7 @@ export default function SignInPage(props) {
       if(userDoc.exist()) {
         const userData = userDoc.data();
         alert(`Welcome back, ${userData.fullName}!`)
-        navigate('/alumni/:userEmail')
+        navigate('/alumni')
       } else {
         alert("No user details found. Please complete your profile.");
       }

@@ -17,11 +17,11 @@ export default function Community() {
         <p className="text-left text-2xl pl-10 p-2 ">Welcome home, alumni! <Button className="bg-green-500 p-2 mb-0 rounded pb-0 hover:bg-green-600 cursor-pointer" onClick={() => navigate('/signin')}>Join Us</Button></p>
     </div>
     <div  className="flex items-center justify-center">
-    <div className=" grid grid-cols-1 bg-gray-100 pt-5 p-10  w-[40%] ">
-       <Link to="community" className="text-center text-xl text-green-400 font-medium pb-5">Community Overview</Link>
-       <Link to=":userEmail" className="text-center pb-3 ">My profile</Link>
-       <Link to="discussion" className="text-center pb-3">Discussion Board</Link>
-       <Link to="events" className="text-center pb-3 ">Event Calendar</Link>
+    <div className=" grid grid-cols-1 bg-gray-300 pt-5 pb-2  w-[35%] ">
+       <Link to="community" className="text-center text-xl text-black font-medium pb-5 hover:text-gray-700">Community Overview</Link>
+       <Link to=":userEmail" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500 ">My profile</Link>
+       <Link to="discussion" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500">Discussion Board</Link>
+       <Link to="events" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500">Event Calendar</Link>
     </div>
     <div>
 

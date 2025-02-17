@@ -43,12 +43,10 @@ const JobForm = () => {
       redirect("/alumni/jobBoard");
     }
   };
-  if (!user) {
-    return <p className="pt-25 text-red-500 text-center text-xl ">You must be logged in to post a job.</p>;
-  }
+  
 
   return (
-    <form onSubmit={handleSubmit} className=" pt-25  max-w-4xl p-4 border rounded-lg shadow-md mx-auto">
+    <form onSubmit={handleSubmit} className=" pt-2  max-w-4xl p-4 m-25 border rounded-lg shadow-md   mx-auto">
       <h3 className="text-lg font-bold mb-2 font-serif">Post a Job</h3>
       <input
         type="text"
