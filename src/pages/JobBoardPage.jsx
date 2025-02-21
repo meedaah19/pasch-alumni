@@ -60,7 +60,7 @@ const JobBoard = () => {
                 Apply Now
               </Link>
               {userEmail === job.postedBy && (
-              <Link to={`/edit/${job.id}`} className="border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
+              <Link to="edit" className="border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
                 Edit
               </Link>
               )}

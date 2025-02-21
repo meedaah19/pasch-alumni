@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         { path: 'alumni/:userEmail', element: <ProfilePage /> },
         {path: 'jobBoard', children: [
           {index: true,  element: <JobBoard/>},
-          {path: 'edit:id', element: <EditJobForm/>}
+          {path: 'edit', element: <EditJobForm/>}
         ]},
         {path: 'jobForm', element: <JobForm/>}
       ]}, 

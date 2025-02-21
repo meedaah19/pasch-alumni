@@ -64,7 +64,7 @@ export default function EditJobForm() {
     }
   };
    return (
-  <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-4 border rounded-lg shadow-md">
+  <form onSubmit={handleSubmit} className="max-w-4xl mt-25 mx-auto p-4 border rounded-lg shadow-md">
   <h3 className="text-lg font-bold mb-2">Edit Job</h3>
   <input type="text" name="title" value={job.title} onChange={handleChange} className="block w-full p-2 border rounded mb-2" />
   <input type="text" name="company" value={job.company} onChange={handleChange} className="block w-full p-2 border rounded mb-2" />
@@ -74,4 +74,4 @@ export default function EditJobForm() {
   <button type="submit" className="bg-green-500 text-white p-2 rounded">{loading ? 'Updating Job...' : 'Update Job'}</button>
 </form>
 );
-}
+} 

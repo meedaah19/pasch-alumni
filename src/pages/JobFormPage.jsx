@@ -43,6 +43,10 @@ const JobForm = () => {
       redirect("/alumni/jobBoard");
     }
   };
+
+  if(!user){
+    return <p className="text-center pt-25 text-xl">Please sign in to post a job</p>
+  }
   
 
   return (
