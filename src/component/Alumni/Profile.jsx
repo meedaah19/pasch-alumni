@@ -14,7 +14,7 @@ export default function Profile(){
              Take a moment to update your profile, connect with others, and make the most of your alumni experience!
              </p>
              <p className="text-gray-700 text-center mt-3 font-serif">
-             Reconnect with your network and make the most of your alumni experience. <Link className="cursor-pointer hover:text-green-400 underline font-medium" to="/alumni/:userEmail">Update your profile</Link>
+             Reconnect with your network and make the most of your alumni experience. <Link className="cursor-pointer hover:text-green-400 underline font-medium" to="/application">Update your profile</Link>
              </p>
         </div>
     )

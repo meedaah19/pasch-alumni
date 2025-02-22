@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { doc, getDoc } from "../../firebase/firebase";
 import { db } from "../../firebase/firebase";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
@@ -37,7 +37,12 @@ export default function AlumniProfile() {
   }
 
   if (!alumniData) {
-    return <p className="text-center text-gray-600 pt-25">Profile not found.</p>;
+    return (
+    <>
+    <p className="text-center text-gray-600 pt-25">Profile not found.</p>
+    <Link className=" text-gray-600 text-xl font-bold underline hover:text-gray-700">Complete your application</Link>
+    </>
+    )
   }
 
   return (

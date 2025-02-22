@@ -12,6 +12,7 @@ import EventsPage from "./pages/EventsPage";
 import JobBoard from "./pages/JobBoardPage";
 import JobForm from "./pages/JobFormPage";
 import EditJobForm from "./pages/EditJobForm";
+import { editJobLoader } from "./loaders/editJobLoader";
 
 const router = createBrowserRouter([
   {
@@ -21,10 +22,11 @@ const router = createBrowserRouter([
       {index: true, element:<HomePage/>},
       { path: 'alumni', children: [
         { index: true, element: <Alumni /> },
-        { path: 'alumni/:userEmail', element: <ProfilePage /> },
+        { path: ':userEmail', element: <ProfilePage /> },
+        {path: 'application', element: <Application/>},
         {path: 'jobBoard', children: [
           {index: true,  element: <JobBoard/>},
-          {path: 'edit', element: <EditJobForm/>}
+          {path: 'edit/:id', element: <EditJobForm/>, loader: editJobLoader}
         ]},
         {path: 'jobForm', element: <JobForm/>}
       ]}, 
@@ -36,7 +38,6 @@ const router = createBrowserRouter([
       ]},
       {path: 'signin', element: <SignInPage/>},
       {path: 'signup', element: <SignUpPage/>},
-      {path: 'application', element: <Application/>}
     ]
   }
 ])

@@ -31,7 +31,7 @@ export default function Highlight(){
                     Explore Courses
                     </Link>
                 </div>
-                <div >
+                <div className="container mx-auto px-6">
                     <img src="https://images.pexels.com/photos/1181297/pexels-photo-1181297.jpeg?auto=compress&cs=tinysrgb&w=600" alt="person studying" className="w-full h-[450px] rounded" />
                 </div>
             </div>

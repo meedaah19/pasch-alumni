@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase"; 
 import { Link } from "react-router-dom";
 import {auth} from "../firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
@@ -10,10 +11,15 @@ const JobBoard = () => {
   const [userEmail, setUserEmail] = useState(null);
 
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      setUserEmail(currentUser.email);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if(user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+
+    if(!userEmail) return;
 
     const fetchJobs = async () => {
       try {
@@ -31,7 +37,8 @@ const JobBoard = () => {
     };
 
     fetchJobs();
-  }, []);
+    return () => unsubscribe();
+  }, [userEmail]);
 
   return (
     <div className="job-board-container max-w-4xl mx-auto p-4 pt-25">
@@ -41,10 +48,10 @@ const JobBoard = () => {
       {loading ? (
         <p>Loading jobs...</p>
       ) : jobs.length === 0 ? (
-        <p className="text-center text-xl text-black">No job opportunities available at the moment.</p>
+        <p className="text-center text-xl text-black">Please sign in to view available job</p>
       ) : (
         <div className="job-list">
-          {jobs.map((job) => (
+          {userEmail && jobs.map((job) => (
             <div key={job.id} className="max-w-4xl mx-auto job-card p-4 mb-4 border rounded-lg shadow-md">
               <h3 className="text-xl font-bold">{job.title}</h3>
               <p className="text-lg">{job.company} - {job.location}</p>
@@ -60,8 +67,8 @@ const JobBoard = () => {
                 Apply Now
               </Link>
               {userEmail === job.postedBy && (
-              <Link to="edit" className="border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
-                Edit
+              <Link to= {`/alumni/jobBoard/edit/${job.id}`} className="border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
+                {loading ? 'loading...' : 'Edit' }
               </Link>
               )}
               </div>
