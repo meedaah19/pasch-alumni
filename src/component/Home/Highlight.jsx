@@ -18,7 +18,7 @@ export default function Highlight(){
           </div>
 
           <section className="bg-gray-500 text-[#FFD700] py-12 text-left mt-7 rounded-4xl">
-            <div className="grid lg:grid-cols-2 grid-cols-1 md:grid-cols-2 gap-6 pr-10  pl-10">
+            <div className="grid lg:grid-cols-2 grid-cols-1 md:grid-cols-2 gap-6 pr-3  pl-3">
                 <div className="container mx-auto px-6  ">
                     <h2 className="text-3xl font-bold mb-4">Enroll in a Course Today!</h2>
                     <p className="text-lg mb-6">As a Pasch Alumni, your journey of growth never stops! Take advantage of our specially curated courses designed to expand your skills, boost your career, and connect you with a thriving network of fellow alumni. Keep learning, keep growing.</p>
@@ -31,7 +31,7 @@ export default function Highlight(){
                     Explore Courses
                     </Link>
                 </div>
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto p-3">
                     <img src="https://images.pexels.com/photos/1181297/pexels-photo-1181297.jpeg?auto=compress&cs=tinysrgb&w=600" alt="person studying" className="w-full h-[450px] rounded" />
                 </div>
             </div>
