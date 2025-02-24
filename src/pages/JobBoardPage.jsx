@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase/firebase"; 
 import { Link } from "react-router-dom";
 import {auth} from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const JobBoard = () => {
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState(null);
@@ -40,6 +42,28 @@ const JobBoard = () => {
     return () => unsubscribe();
   }, [userEmail]);
 
+  const handleDelete = async (jobId) => {
+    setLoading(true);
+    if (!jobId) {
+      console.error("Job ID is undefined. Cannot delete job.");
+      return;
+    }
+
+    const proceed = window.confirm('Are you sure you want to delete this job?');
+    try{
+      if(proceed) {
+        const jobRef = doc(db, 'jobs', jobId);
+        await deleteDoc(jobRef);
+      alert("Job deleted successfully!");
+        navigate(0);
+      }
+    }catch (error) {
+      alert('Error deleting job. Please try again:', error);
+    } finally{
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="job-board-container max-w-4xl mx-auto p-4 pt-25">
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6 font-serif">Alumni Job Board</h2>
@@ -52,7 +76,7 @@ const JobBoard = () => {
       ) : (
         <div className="job-list">
           {userEmail && jobs.map((job) => (
-            <div key={job.id} className="max-w-4xl mx-auto job-card p-4 mb-4 border rounded-lg shadow-md">
+            <div key={job.id} className="max-w-4xl mx-auto job-card pb-2 p-4 mb-4 border rounded-lg shadow-md ">
               <h3 className="text-xl font-bold">{job.title}</h3>
               <p className="text-lg">{job.company} - {job.location}</p>
               <p className="text-sm text-gray-600">{job.description}</p>
@@ -67,9 +91,14 @@ const JobBoard = () => {
                 Apply Now
               </Link>
               {userEmail === job.postedBy && (
-              <Link to= {`/alumni/jobBoard/edit/${job.id}`} className="border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
-                {loading ? 'loading...' : 'Edit' }
+                <menu>
+              <Link to= {`/alumni/jobBoard/edit/${job.id}`}  className="text-black mt-4 text-xl border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
+               Edit
               </Link>
+              <button onClick= {() => handleDelete(job.id)} disabled={loading} className="mt-4 text-red-500 text-xl border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white ml-2" >
+                { loading ? 'Deleting...' : 'Delete' }
+              </button>
+              </menu>
               )}
               </div>
             </div>

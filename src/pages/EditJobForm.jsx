@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../firebase/firebase"; 
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -15,7 +15,7 @@ export default function EditJobForm() {
     setJob({ ...job, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, jobId, updatedData) => {
     e.preventDefault();
     setLoading(true);
 
@@ -24,17 +24,28 @@ export default function EditJobForm() {
       setLoading(false);
       return;
     }
+    
+      if(!jobId) {
+        return;
+      }
 
-    try {
-      await updateDoc(doc(db, "jobs", job.id), job);
-      alert("Job updated successfully!");
-      redirect("/alumni/jobBoard"); 
-    } catch (error) {
-      console.error("Error updating job:", error);
-      alert("Error updating job. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+      try {
+        const jobRef = doc(db, "jobs", jobId);
+        const jobSnap = await getDoc(jobRef);
+
+        if(!jobSnap.exists()) {
+          return
+        }
+
+        await updateDoc(jobRef, updatedData);
+        alert("Job updated successfully!");
+        redirect("/alumni/jobBoard"); 
+      } catch (error) {
+        console.error("Error updating job:", error);
+        alert("Error updating job. Please try again.");
+      } finally {
+        setLoading(false);
+      }
   };
    return (
   <form onSubmit={handleSubmit} className="max-w-4xl mt-25 mx-auto p-4 border rounded-lg shadow-md">
