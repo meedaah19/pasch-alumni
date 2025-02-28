@@ -23,7 +23,6 @@ const router = createBrowserRouter([
       { path: 'alumni', children: [
         { index: true, element: <Alumni /> },
         { path: ':userEmail', element: <ProfilePage /> },
-        {path: 'application', element: <Application/>},
         {path: 'jobBoard', children: [
           {index: true,  element: <JobBoard/>},
           {path: 'edit/:id', element: <EditJobForm/>, loader: editJobLoader}
@@ -38,6 +37,7 @@ const router = createBrowserRouter([
       ]},
       {path: 'signin', element: <SignInPage/>},
       {path: 'signup', element: <SignUpPage/>},
+      {path: 'application', element: <Application/>},
     ]
   }
 ])

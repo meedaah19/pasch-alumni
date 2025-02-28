@@ -40,7 +40,7 @@ export default function AlumniProfile() {
     return (
     <>
     <p className="text-center text-gray-600 pt-25">Profile not found.</p>
-    <Link className=" text-gray-600 text-xl font-bold underline hover:text-gray-700">Complete your application</Link>
+    <Link to='/application' className=" text-gray-600 text-xl font-bold underline hover:text-gray-700">Complete your application</Link>
     </>
     )
   }
