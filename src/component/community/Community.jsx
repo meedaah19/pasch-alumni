@@ -1,10 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 import Button from "../util/Button";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase/firebase";
 
 export default function Community() {
   const navigate = useNavigate();
+  const [user] = useAuthState(auth);
 
+  const sanitizeEmail = (email) => email.replace(/[@.#$/[\]]/g, "_");
+ 
   return (
     <main className="container mx-auto pt-25 ">
     <div className="mb-10 w-full lg:h-[350px]  font-serif text-white bg-cover bg-center " 
@@ -17,9 +22,16 @@ export default function Community() {
         <p className="text-left text-2xl pl-10 p-2 ">Welcome home, alumni! <Button className="bg-green-500 p-2 mb-0 rounded pb-0 hover:bg-green-600 cursor-pointer" onClick={() => navigate('/signin')}>Join Us</Button></p>
     </div>
     <div  className="flex items-center justify-center">
-    <div className=" grid grid-cols-1 bg-gray-300 pt-5 pb-2  w-[35%] ">
+    <div className=" grid grid-cols-1 bg-gray-300 pt-5 pb-2  w-[60%] ">
        <Link to="community" className="text-center text-xl text-black font-medium pb-5 hover:text-gray-700">Community Overview</Link>
-       <Link to=":userEmail" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500 ">My profile</Link>
+       {user ? (
+          <Link to={`/community/user/${sanitizeEmail(user.email)}`} className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500 ">My profile</Link>
+       ) : (
+        <Link to="/signin" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500">
+              Sign in to view profile
+            </Link>
+       )}
+       
        <Link to="discussion" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500">Discussion Board</Link>
        <Link to="events" className="text-center pb-3 text-green-700 text-[20px] hover:text-green-500">Event Calendar</Link>
     </div>

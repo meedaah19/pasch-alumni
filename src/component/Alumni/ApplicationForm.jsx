@@ -11,6 +11,7 @@ export default function ApplicationForm() {
     name: "",
     email: "",
     phone: "",
+    image: "",
     location: "",
     bio: "",
     degree: "",
@@ -78,7 +79,7 @@ export default function ApplicationForm() {
       console.log("Application submitted!");
   
       setSubmitted(true);
-      navigate(`/alumni/${sanitizedEmail}`);
+      navigate(`/community/user/${sanitizedEmail}`);
     } catch (error) {
       console.error("Error submitting form:", error);
       setError(`Error: ${error.message}`);
@@ -104,6 +105,7 @@ export default function ApplicationForm() {
           <Input type="text" name="name" label="Full Name" value={formData.name} onChange={handleChange} required />
           <Input type="email" name="email" label="Email" value={formData.email} onChange={handleChange} required />
           <Input type="tel" name="phone" label="Phone" value={formData.phone} onChange={handleChange} required />
+          <Input type="file" name="Profile-image" label="Profile-Image" value={formData.image} onChange={handleChange} required />
           <Input type="text" name="location" label="Location" value={formData.location} onChange={handleChange} required />
           <Input type="text" name="bio" label="Short Bio" value={formData.bio} onChange={handleChange} required />
           <Input type="text" name="degree" label="Degree" value={formData.degree} onChange={handleChange} required />

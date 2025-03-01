@@ -22,7 +22,6 @@ const router = createBrowserRouter([
       {index: true, element:<HomePage/>},
       { path: 'alumni', children: [
         { index: true, element: <Alumni /> },
-        { path: ':userEmail', element: <ProfilePage /> },
         {path: 'jobBoard', children: [
           {index: true,  element: <JobBoard/>},
           {path: 'edit/:id', element: <EditJobForm/>, loader: editJobLoader}
@@ -33,7 +32,7 @@ const router = createBrowserRouter([
         {index: true, element: <CommunityPage/>},
         {path: 'discussion', element: <DiscussionPage/>},
         {path: 'events', element: <EventsPage/>},
-        {path:  ':userEmail', element: <ProfilePage />}
+        {path:  'user/:userEmail', element: <ProfilePage />}
       ]},
       {path: 'signin', element: <SignInPage/>},
       {path: 'signup', element: <SignUpPage/>},
@@ -44,9 +43,8 @@ const router = createBrowserRouter([
 
 function App() {
   return( 
-  <RouterProvider router={router}/> 
-  
-  )
+      <RouterProvider router={router}/> 
+  );
 }
 
 export default App;

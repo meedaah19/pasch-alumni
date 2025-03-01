@@ -63,14 +63,14 @@ export default function AlumniProfile() {
 
       <div className="flex justify-center gap-4 my-4">
         {alumniData.linkedin && (
-          <a href={alumniData.linkedin} className="text-blue-600 text-2xl" target="_blank" rel="noopener noreferrer">
+          <Link href={alumniData.linkedin} className="text-blue-600 text-2xl" target="_blank" rel="noopener noreferrer">
             <FaLinkedin />
-          </a>
+          </Link>
         )}
         {alumniData.github && (
-          <a href={alumniData.github} className="text-gray-900 text-2xl" target="_blank" rel="noopener noreferrer">
+          <Link href={alumniData.github} className="text-gray-900 text-2xl" target="_blank" rel="noopener noreferrer">
             <FaGithub />
-          </a>
+          </Link>
         )}
       </div>
 
@@ -89,6 +89,11 @@ export default function AlumniProfile() {
             <span key={index} className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">{skill}</span>
           ))}
         </div>
+      </div>
+
+      <div className="">
+        <Link>Edit</Link>
+        <button>Delete Account</button>
       </div>
     </div>
   );
