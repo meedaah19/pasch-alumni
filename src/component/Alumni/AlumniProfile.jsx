@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { doc, getDoc } from "../../firebase/firebase";
 import { db } from "../../firebase/firebase";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { deleteDoc } from "firebase/firestore";
+import React from "react";
 
 export default function AlumniProfile() {
   const {userEmail} = useParams();
@@ -43,6 +45,28 @@ export default function AlumniProfile() {
     <Link to='/application' className=" text-gray-600 text-xl font-bold underline hover:text-gray-700">Complete your application</Link>
     </>
     )
+  }
+
+  const handleDelete = async (userId) => {
+    setLoading(true);
+    if (!userId) {
+      console.error("User ID is undefined. Cannot delete Profile.");
+      return;
+    }
+
+    const proceed = window.confirm('Are you sure you want to delete your profile?');
+    try{
+      if(proceed) {
+        const userRef = doc(db, 'alumni', userId);
+        await deleteDoc(userRef);
+      alert("profile deleted successfully!");
+        navigate(0);
+      }
+    }catch (error) {
+      alert('Error deleting Profile. Please try again:', error);
+    } finally{
+      setLoading(false);
+    }
   }
 
   return (
@@ -91,9 +115,9 @@ export default function AlumniProfile() {
         </div>
       </div>
 
-      <div className="">
-        <Link>Edit</Link>
-        <button>Delete Account</button>
+      <div className="flex justify-end items-end p-2">
+        <Link to= {`/community/user/${userEmail}/editApplication/${userEmail}`} className="text-black mt-4 text-xl border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">Edit</Link>
+        <button onClick= {() => handleDelete(userEmail)} disabled={loading} className="mt-4 text-red-500 text-xl border-1 border-red-500 rounded-md p-1 hover:bg-red-500 hover:text-white ml-2 cursor-pointer">{loading ? 'Deleting' : 'Delete Account'}</button>
       </div>
     </div>
   );

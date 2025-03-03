@@ -95,7 +95,7 @@ const JobBoard = () => {
               <Link to= {`/alumni/jobBoard/edit/${job.id}`}  className="text-black mt-4 text-xl border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
                Edit
               </Link>
-              <button onClick= {() => handleDelete(job.id)} disabled={loading} className="mt-4 text-red-500 text-xl border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white ml-2" >
+              <button onClick= {() => handleDelete(job.id)} disabled={loading} className="mt-4 text-red-500 text-xl border-1 border-red-500 rounded-md p-1 hover:bg-red-500 hover:text-white ml-2 cursor-pointer" >
                 { loading ? 'Deleting...' : 'Delete' }
               </button>
               </menu>

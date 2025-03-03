@@ -14,7 +14,7 @@ export default function EditJobForm() {
   const handleChange = (e) => {
     setJob({ ...job, [e.target.name]: e.target.value });
   };
-
+ 
   const handleSubmit = async (e, jobId, updatedData) => {
     e.preventDefault();
     setLoading(true);

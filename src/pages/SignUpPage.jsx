@@ -21,6 +21,7 @@ import { styled } from '@mui/material/styles';
 import AppTheme from '../Theme/AppTheme';
 import ColorModeSelect from '../Theme/ColorModeSelect';
 import { GoogleIcon} from '../Theme/CustomIcons';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +67,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 
 export default function SignUpPage(props) {
   const provider = new GoogleAuthProvider();
+  const [user] = useAuthState(auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -162,6 +164,7 @@ export default function SignUpPage(props) {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
+      {user ? 'You are already logged in' : 
       <SignUpContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-20'>
         <Card variant="outlined">
           <Typography
@@ -266,6 +269,7 @@ export default function SignUpPage(props) {
           </Box>
         </Card>
       </SignUpContainer>
+      }
     </AppTheme>
   );
 }

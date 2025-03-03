@@ -12,3 +12,13 @@ export async function editJobLoader({params}) {
         throw new Error("Job not found!",{status: 404})};
         return jobSnap.data();
 }
+
+export async function editApplicationLoader({params}) {
+    const userId = params.id;
+    const userRef = doc(db, 'alumni', userId);
+    const userSnap = await getDoc(userRef);
+
+    if(!userSnap.exists()) {
+        throw new Error("Profile not found!",{status: 404})};
+        return userSnap.data();
+}

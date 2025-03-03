@@ -22,6 +22,7 @@ import ForgotPassword from '../auth/ForgotPassword';
 import AppTheme from '../Theme/AppTheme';
 import ColorModeSelect from '../Theme/ColorModeSelect';
 import { GoogleIcon } from '../Theme/CustomIcons';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -67,6 +68,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 
 export default function SignInPage(props) {
   const provider = new GoogleAuthProvider();
+  const [user] = useAuthState(auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
@@ -151,6 +153,7 @@ export default function SignInPage(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
+      {user ? 'you are aleardy logged in' :
       <SignInContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-10'>
         <ColorModeSelect sx={{ position: 'fixed', top: '6rem', right: '1rem' }} />
         <Card variant="outlined">
@@ -256,6 +259,7 @@ export default function SignInPage(props) {
           </Box>
         </Card>
       </SignInContainer>
+       }
     </AppTheme>
   );
 }

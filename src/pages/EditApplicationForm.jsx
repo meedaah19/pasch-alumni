@@ -1,43 +1,21 @@
+import Input from "../component/util/Input";
+import {useLoaderData, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { setDoc, doc, collection, getDoc } from "firebase/firestore";
-import { db, auth, storage } from "../../firebase/firebase";
-import Input from "../util/Input";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db, auth, storage } from "../firebase/firebase"; 
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function ApplicationForm() {
-  const [user] = useAuthState(auth);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    image: "",
-    location: "",
-    bio: "",
-    degree: "",
-    major: "",
-    gradYear: "",
-    jobTitle: "",
-    company: "",
-    startYear: "",
-    endYear: "",
-    present: false,
-    description: "",
-    industry: "",
-    github: "",
-    linkedin: "",
-    projects: "",
-    volunteer: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('')
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
+export default function EditApplicationForm(){
+    const [user] = useAuthState(auth);
+    const userData = useLoaderData();
+    const [formData, setFormData] = useState(userData);
+    
+      const [loading, setLoading] = useState(false);
+      const redirect = useNavigate();
+    
+      const handleChange = (e) => {
+        const { name, value, type, checked, files } = e.target;
     if (type === 'file') {
       const file = files[0];
       if (!file) return;
@@ -63,71 +41,45 @@ export default function ApplicationForm() {
     }));
   }
     };
-   
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    setLoading(true);
-    console.log("Submit button clicked!");
-  
-    if (!formData.email) {
-      console.error("Error: Email is missing (formData.email is empty)");
-      setError("Email is required.");
-      setLoading(false);
-      return;
-    }
-    console.log("Email exists, proceeding with submission...");
-  
-    const sanitizedEmail = formData.email.replace(/[@.#$/[\]]/g, "_");
-    console.log("Sanitized email:", sanitizedEmail);
-  
-    try {
-      const alumniCollection = collection(db, "alumni");
-      const docRef = doc(alumniCollection, sanitizedEmail);
-      console.log("Document reference:", docRef);
-  
-      const docSnap = await getDoc(docRef);
-      console.log("Checking if document exists...");
-  
-      if (docSnap.exists()) {
-        console.warn("An application with this email already exists.");
-        setError("An application with this email already exists.");
-        setLoading(false);
-        return;
-      }
-
-      console.log("Saving application to Firestore...");
-      await setDoc(docRef, formData);
-      alert("Application submitted!");
-  
-      setSubmitted(true);
-      navigate(`/community/user/${sanitizedEmail}`);
-    } catch (error) {
-      alert("Error submitting form:", error);
-      setError(`Error: ${error.message}`);
-    }
-  
-    setLoading(false);
+      const handleSubmit = async (e, userId, updatedData) => {
+        e.preventDefault();
+        setLoading(true);
     
-  };
-  if(!user){
-    return <p className="text-center text-gray-600 pt-25">Please login to complete your application.</p>
-  }
+        if (user?.email !== userData.postedBy) {
+          alert("You are not authorized to edit this job.");
+          setLoading(false);
+          return;
+        }
+    
+          try {
+            const userRef = doc(db, "jobs", userId);
+            const userSnap = await getDoc(userRef);
+    
+            if(!userSnap.exists()) {
+              return
+            }
+    
+            await updateDoc(userRef, updatedData);
+            alert("Profile updated successfully!");
+            redirect("/alumni/jobBoard"); 
+          } catch (error) {
+            console.error("Error updating job:", error);
+            alert("Error updating job. Please try again.");
+          } finally {
+            setLoading(false);
+          }
+      };
+    
 
-  return (
-    <div className="bg-gray-100 min-h-screen p-10 pt-25 flex flex-col items-center">
+    return(
+        <div className="bg-gray-100 min-h-screen p-10 pt-25 flex flex-col items-center">
       <h1 className="text-2xl md:text-4xl font-bold text-center text-black mb-5">Alumni Application</h1>
-      {submitted ? (
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-2xl font-bold text-green-600 mb-3">Application Submitted!</h2>
-          <p className="text-xl text-black">Your application has been received. We will notify you via email.</p>
-        </div>
-      ) : (
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md" >
           <Input type="text" name="name" label="Full Name" value={formData.name} onChange={handleChange} required />
           <Input type="email" name="email" label="Email" value={formData.email} onChange={handleChange} required />
           <Input type="tel" name="phone" label="Phone" value={formData.phone} onChange={handleChange} required />
-          <Input type="file" accept='image/*' name="Profile-image" label="Profile-Image" onChange={handleChange} required />
+          <Input type="file" name="Profile-image" label="Profile-Image" accept="image/*" onChange={handleChange} required />
           <Input type="text" name="location" label="Location" value={formData.location} onChange={handleChange} required />
           <Input type="text" name="bio" label="Short Bio" value={formData.bio} onChange={handleChange} required />
           <Input type="text" name="degree" label="Degree" value={formData.degree} onChange={handleChange} required />
@@ -147,10 +99,9 @@ export default function ApplicationForm() {
           <Input type="text" name="projects" label="Projects (Optional)" value={formData.projects} onChange={handleChange} />
           <Input type="text" name="volunteer" label="Volunteer Work (Optional)" value={formData.volunteer} onChange={handleChange} />
           <button  type="submit" className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold mt-4 cursor-pointerb" disabled={loading}>
-            {loading ? "Submitting..." : "Submit Application"}
+            {loading ? "Updating..." : "Update Application"}
           </button>
         </form>
-      )}
     </div>
   );
 }
