@@ -22,6 +22,7 @@ export default function AlumniProfile() {
 
       if (docSnap.exists()) {
         setAlumniData(docSnap.data());
+        
       } else {
         setAlumniData(null); 
         console.log("No such document!");
@@ -79,8 +80,9 @@ export default function AlumniProfile() {
     <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-[100px]">
       <div className="relative h-40 bg-gradient-to-r from-red-500 to-red-700"></div>
 
-      <div className="text-center p-6 -mt-16">
-        <img className="w-32 h-32 mx-auto rounded-full border-4 border-white shadow-md" src={alumniData.profilePic || "/profile.jpg"} alt="Alumni Profile" />
+      <div className="text-center p-6 -mt-6">
+        <img className="w-32 h-32 mx-auto rounded-full border-4 border-white shadow-md" src={alumniData?.image ? `${alumniData.image}?t=${Date.now()}` : "/profile.jpg"}
+ alt="Alumni Profile" />
         <h2 className="text-2xl font-semibold text-gray-800 mt-2">{alumniData.name}</h2>
         <p className="text-gray-600">Pasch Alumni - Class of {alumniData.gradYear}</p>
         <p className="text-gray-500">{alumniData.jobTitle} at {alumniData.company}</p>
