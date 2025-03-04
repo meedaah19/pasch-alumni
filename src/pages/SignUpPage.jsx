@@ -164,7 +164,7 @@ export default function SignUpPage(props) {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
-      {user ? 'You are already logged in' : 
+      {user ?( <p className='pt-25 text-2xl'>you are aleardy logged in</p> ) : 
       <SignUpContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-20'>
         <Card variant="outlined">
           <Typography

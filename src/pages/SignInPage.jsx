@@ -152,7 +152,7 @@ export default function SignInPage(props) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      {user ? 'you are aleardy logged in' :
+      {user ? ( <p className='pt-25 text-2xl'>you are aleardy logged in</p> ) :
       <SignInContainer direction="column" justifyContent="space-between" className='md:mt-20 mt-10'>
         <ColorModeSelect sx={{ position: 'fixed', top: '6rem', right: '1rem' }} />
         <Card variant="outlined">

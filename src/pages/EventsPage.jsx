@@ -1,5 +1,5 @@
 export default function EventsPage() {
     return(
-        <h1>Events</h1>
+        <h1 className="pt-25">Events</h1>
     )
 }   

@@ -1,5 +1,5 @@
 export default function News(){
     return(
-        <h2>    Newspage</h2>
+        <h2 className="pt-25">    Newspage</h2>
     )
 }

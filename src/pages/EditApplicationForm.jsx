@@ -16,31 +16,12 @@ export default function EditApplicationForm(){
     
       const handleChange = (e) => {
         const { name, value, type, checked, files } = e.target;
-    if (type === 'file') {
-      const file = files[0];
-      if (!file) return;
-
-      const storageRef = ref(storage, `profileImages/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        null,
-        (error) => {
-          console.error("Error uploading image:", error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setFormData((prev) => ({ ...prev, image: downloadURL }));
-        }
-      );
-    } else{
+    
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   }
-    };
 
       const handleSubmit = async (e, userId, updatedData) => {
         e.preventDefault();
