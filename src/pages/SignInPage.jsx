@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase/firebase';
+import { auth, db, doc, getDoc } from '../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth'; 
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { doc} from "../firebase/firebase";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -109,7 +108,7 @@ export default function SignInPage(props) {
       const user = userCredential.user;
 
       const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if(userDoc.exist()) {
+      if(userDoc.exists()) {
         const userData = userDoc.data();
         alert(`Welcome back, ${userData.fullName}!`)
         navigate('/alumni')
@@ -214,7 +213,7 @@ export default function SignInPage(props) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ForgotPassword open={open} handleClose={handleClose} />
+            <ForgotPassword open={open} handleClose={handleClose}  />
             <Button
               type="submit"
               fullWidth
