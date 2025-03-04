@@ -1,3 +1,12 @@
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { doc, getDoc } from "../../firebase/firebase";
+import { db } from "../../firebase/firebase";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { deleteDoc } from "firebase/firestore";
+import React from "react";
+
+
 export default function AlumniProfile() {
   const { userEmail } = useParams();
   const [alumniData, setAlumniData] = useState(null);

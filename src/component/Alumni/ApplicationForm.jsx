@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setDoc, doc, collection, getDoc } from "firebase/firestore";
-import { db, auth, storage } from "../../firebase/firebase";
+import { db, auth } from "../../firebase/firebase";
 import Input from "../util/Input";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import axios from "axios";
+import {Image} from 'cloudinary-react';
 
 export default function ApplicationForm() {
   const [user] = useAuthState(auth);
@@ -23,7 +24,6 @@ export default function ApplicationForm() {
     startYear: "",
     endYear: "",
     present: false,
-    description: "",
     industry: "",
     github: "",
     linkedin: "",
@@ -33,101 +33,113 @@ export default function ApplicationForm() {
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('')
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    if (type === 'file') {
-      const file = files[0];
-      if (!file) return;
+  const handleImageUpload = async (file) => {
+    if (!file) return;
 
-      const storageRef = ref(storage, `profileImages/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        null,
-        (error) => {
-          console.error("Error uploading image:", error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setFormData((prev) => ({ ...prev, image: downloadURL }));
-        }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "profile-picture");
+    try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dhkwvuzaz/image/upload",
+        formData
       );
-    } else{
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  }
-    };
-   
+      return response.data.secure_url; 
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      setError("Failed to upload image.");
+      return null;
+    }
+  };
+
+  const handleChange = async (e) => {
+    const { name, value, type, checked, files } = e.target;
+
+    if (type === "file" && files[0]) {
+      setLoading(true);
+      const imageUrl = await handleImageUpload(files[0]);
+      setLoading(false);
+      if (imageUrl) {
+        setFormData((prev) => ({ ...prev, image: imageUrl }));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setLoading(true);
-    console.log("Submit button clicked!");
-  
+
     if (!formData.email) {
-      console.error("Error: Email is missing (formData.email is empty)");
       setError("Email is required.");
       setLoading(false);
       return;
     }
-    console.log("Email exists, proceeding with submission...");
-  
+
     const sanitizedEmail = formData.email.replace(/[@.#$/[\]]/g, "_");
-    console.log("Sanitized email:", sanitizedEmail);
-  
+
     try {
       const alumniCollection = collection(db, "alumni");
       const docRef = doc(alumniCollection, sanitizedEmail);
-      console.log("Document reference:", docRef);
-  
       const docSnap = await getDoc(docRef);
-      console.log("Checking if document exists...");
-  
+
       if (docSnap.exists()) {
-        console.warn("An application with this email already exists.");
         setError("An application with this email already exists.");
         setLoading(false);
         return;
       }
 
-      console.log("Saving application to Firestore...");
       await setDoc(docRef, formData);
       alert("Application submitted!");
-  
       setSubmitted(true);
       navigate(`/community/user/${sanitizedEmail}`);
     } catch (error) {
-      alert("Error submitting form:", error);
+      console.error("Error submitting form:", error);
       setError(`Error: ${error.message}`);
     }
-  
+
     setLoading(false);
-    
   };
-  if(!user){
-    return <p className="text-center text-gray-600 pt-25">Please login to complete your application.</p>
+
+  if (!user) {
+    return (
+      <p className="text-center text-gray-600 pt-25">
+        Please login to complete your application.
+      </p>
+    );
   }
 
   return (
     <div className="bg-gray-100 min-h-screen p-10 pt-25 flex flex-col items-center">
-      <h1 className="text-2xl md:text-4xl font-bold text-center text-black mb-5">Alumni Application</h1>
+      <h1 className="text-2xl md:text-4xl font-bold text-center text-black mb-5">
+        Alumni Application
+      </h1>
       {submitted ? (
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-2xl font-bold text-green-600 mb-3">Application Submitted!</h2>
-          <p className="text-xl text-black">Your application has been received. We will notify you via email.</p>
+          <h2 className="text-2xl font-bold text-green-600 mb-3">
+            Application Submitted!
+          </h2>
+          <p className="text-xl text-black">
+            Your application has been received. We will notify you via email.
+          </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md" >
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
+        >
           <Input type="text" name="name" label="Full Name" value={formData.name} onChange={handleChange} required />
           <Input type="email" name="email" label="Email" value={formData.email} onChange={handleChange} required />
           <Input type="tel" name="phone" label="Phone" value={formData.phone} onChange={handleChange} required />
-          <Input type="file" accept='image/*' name="Profile-image" label="Profile-Image" onChange={handleChange} required />
+          <Input type="file" accept="image/*" name="image" label="Profile Image" onChange={handleChange} required />
+          {formData.image && <img src={formData.image} alt="Profile picture" className="w-32 h-32 object-cover mt-2" />}
           <Input type="text" name="location" label="Location" value={formData.location} onChange={handleChange} required />
           <Input type="text" name="bio" label="Short Bio" value={formData.bio} onChange={handleChange} required />
           <Input type="text" name="degree" label="Degree" value={formData.degree} onChange={handleChange} required />
@@ -146,7 +158,7 @@ export default function ApplicationForm() {
           <Input type="text" name="linkedin" label="LinkedIn (Optional)" value={formData.linkedin} onChange={handleChange} />
           <Input type="text" name="projects" label="Projects (Optional)" value={formData.projects} onChange={handleChange} />
           <Input type="text" name="volunteer" label="Volunteer Work (Optional)" value={formData.volunteer} onChange={handleChange} />
-          <button  type="submit" className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold mt-4 cursor-pointerb" disabled={loading}>
+          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold mt-4" disabled={loading}>
             {loading ? "Submitting..." : "Submit Application"}
           </button>
         </form>
