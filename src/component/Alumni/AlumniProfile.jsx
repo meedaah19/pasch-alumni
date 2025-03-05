@@ -91,12 +91,12 @@ export default function AlumniProfile() {
 
       <div className="flex justify-center gap-4 my-4">
         {alumniData.linkedin && (
-          <Link href={alumniData.linkedin} className="text-blue-600 text-2xl" target="_blank" rel="noopener noreferrer">
+          <Link to={alumniData.linkedin} className="text-blue-600 text-2xl" target="_blank" rel="noopener noreferrer">
             <FaLinkedin />
           </Link>
         )}
         {alumniData.github && (
-          <Link href={alumniData.github} className="text-gray-900 text-2xl" target="_blank" rel="noopener noreferrer">
+          <Link to={alumniData.github} className="text-gray-900 text-2xl" target="_blank" rel="noopener noreferrer">
             <FaGithub />
           </Link>
         )}
@@ -109,16 +109,34 @@ export default function AlumniProfile() {
         <h3 className="mt-4 text-xl font-semibold text-gray-800">Work Experience</h3>
         <p className="text-gray-600">{alumniData.jobTitle}, {alumniData.company} ({alumniData.startYear} - {alumniData.present ? "Present" : alumniData.endYear})</p>
       </div>
-
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
+      {alumniData.projects && (
+        <>
+         <h3 className="text-xl font-semibold text-gray-800">Projects</h3>
+        <Link className="text-gray-600" to={alumniData.projects}>{alumniData.projects}
+        </Link>
+        </>
+        )}  
+      {alumniData.volunteer && (
+        <>
+         <h3 className="text-xl font-semibold text-gray-800">Volunteer</h3>
+        <Link className="text-gray-600" to={alumniData.volunteer}>{alumniData.volunteer}
+        </Link>
+        </>
+        )}  
+      </div>
+      <div className="p-6">
+        {alumniData.skills && (
+          <>
+            <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
         <div className="flex flex-wrap gap-2 mt-2">
           {alumniData.skills?.map((skill, index) => (
-            <span key={index} className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">{skill}</span>
+            <span key={index} className="bg-red-500 text-gray-600 px-3 py-1 rounded-full text-sm">{skill}</span>
           ))}
         </div>
+          </>
+        )}
       </div>
-
       <div className="flex justify-end items-end p-2">
         <Link to={`/community/user/${userEmail}/editApplication/${userEmail}`} className="text-black mt-4 text-xl border-1 border-green-500 rounded-md p-1 hover:bg-green-500 hover:text-white">
           Edit

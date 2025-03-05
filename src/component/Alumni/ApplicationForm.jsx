@@ -5,7 +5,6 @@ import { db, auth } from "../../firebase/firebase";
 import Input from "../util/Input";
 import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
-import {Image} from 'cloudinary-react';
 
 export default function ApplicationForm() {
   const [user] = useAuthState(auth);
@@ -29,6 +28,7 @@ export default function ApplicationForm() {
     linkedin: "",
     projects: "",
     volunteer: "",
+    skills:[],
   });
 
   const [loading, setLoading] = useState(false);
@@ -55,6 +55,24 @@ export default function ApplicationForm() {
     }
   };
 
+  const handleSkillAdd = (e) => {
+    if (e.key === "Enter" && e.target.value.trim() !== "") {
+      e.preventDefault(); 
+      setFormData((prev) => ({
+        ...prev,
+        skills: [...prev.skills, e.target.value.trim()], 
+      }));
+      e.target.value = ""; 
+    }
+  };
+  
+  const handleSkillRemove = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index), // 
+    }));
+  };
+  
   const handleChange = async (e) => {
     const { name, value, type, checked, files } = e.target;
 
@@ -158,6 +176,16 @@ export default function ApplicationForm() {
           <Input type="text" name="linkedin" label="LinkedIn (Optional)" value={formData.linkedin} onChange={handleChange} />
           <Input type="text" name="projects" label="Projects (Optional)" value={formData.projects} onChange={handleChange} />
           <Input type="text" name="volunteer" label="Volunteer Work (Optional)" value={formData.volunteer} onChange={handleChange} />
+          <Input type="text" name="skills" label='Skills (Press Enter to add)' placeholder="Type a skill and press Enter"className="border rounded p-2 w-full mt-1" onKeyDown={handleSkillAdd} />
+          <div className="flex flex-wrap gap-2 mt-2">
+          {formData.skills.map((skill, index) => (
+            <span key={index} className="bg-red-500 text-white px-3 py-1 rounded-full text-sm flex items-center">
+              {skill}
+              <button type="button" className="ml-2 text-white font-bold" onClick={() => handleSkillRemove(index)}>x</button>
+            </span>
+          ))}
+          </div>
+
           <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold mt-4" disabled={loading}>
             {loading ? "Submitting..." : "Submit Application"}
           </button>

@@ -20,5 +20,5 @@ export async function editApplicationLoader({params}) {
 
     if(!userSnap.exists()) {
         throw new Error("Profile not found!",{status: 404})};
-        return userSnap.data();
-}
+        return { id: userId, ...userSnap.data() };
+    }
