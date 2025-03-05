@@ -131,7 +131,7 @@ export default function AlumniProfile() {
             <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
         <div className="flex flex-wrap gap-2 mt-2">
           {alumniData.skills?.map((skill, index) => (
-            <span key={index} className="bg-red-500 text-gray-600 px-3 py-1 rounded-full text-sm">{skill}</span>
+            <span key={index} className="bg-red-500 text-white px-3 py-4 rounded-full text-sm">{skill}</span>
           ))}
         </div>
           </>
